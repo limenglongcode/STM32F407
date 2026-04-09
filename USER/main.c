@@ -15,6 +15,7 @@
 #include "key.h"
 #include "iic.h"
 #include "uart.h"
+#include "config.h"
 
 void SystemClock_Config(void)
 {
@@ -40,9 +41,11 @@ int main(void)
     USART1_Init();          //串口初始化
     I2C_EEPROM_Init();      //I2C初始化
 
-    USART_SendString("\r\n==== M24M02 test ====\r\n");
+    USART_SendString("\r\n==== ");
+    USART_SendString(CHIP_NAME);
+    USART_SendString(" test ====\r\n");
     USART_SendString("WK_UP: single address R/W demo\r\n");
-    USART_SendString("KEY0: 4-byte life test start\r\n");
+    USART_SendString("KEY0: byte life test start\r\n");
     USART_SendString("KEY1: page life test start\r\n");
 
     while (1)

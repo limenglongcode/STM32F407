@@ -1,4 +1,4 @@
-Component: ARM Compiler 5.06 update 6 (build 750) Tool: armlink [4d35ed]
+Component: ARM Compiler 5.06 update 4 (build 422) Tool: armlink [4d35d2]
 
 ==============================================================================
 
@@ -143,8 +143,6 @@ Section Cross References
     iic.o(i.EEPROM_WriteByte) refers to stm32f4xx_i2c.o(i.I2C_Send7bitAddress) for I2C_Send7bitAddress
     iic.o(i.EEPROM_WriteByte) refers to stm32f4xx_i2c.o(i.I2C_SendData) for I2C_SendData
     iic.o(i.EEPROM_WriteByte) refers to stm32f4xx_i2c.o(i.I2C_GenerateSTOP) for I2C_GenerateSTOP
-    iic.o(i.EEPROM_WriteByte) refers to delay.o(i.Delay_ms) for Delay_ms
-    iic.o(i.EEPROM_WriteByte) refers to iic.o(i.EEPROM_WaitReady) for EEPROM_WaitReady
     iic.o(i.I2C_EEPROM_Init) refers to stm32f4xx_rcc.o(i.RCC_APB1PeriphClockCmd) for RCC_APB1PeriphClockCmd
     iic.o(i.I2C_EEPROM_Init) refers to stm32f4xx_rcc.o(i.RCC_AHB1PeriphClockCmd) for RCC_AHB1PeriphClockCmd
     iic.o(i.I2C_EEPROM_Init) refers to stm32f4xx_gpio.o(i.GPIO_Init) for GPIO_Init
@@ -152,16 +150,19 @@ Section Cross References
     iic.o(i.I2C_EEPROM_Init) refers to stm32f4xx_i2c.o(i.I2C_Init) for I2C_Init
     iic.o(i.I2C_EEPROM_Init) refers to stm32f4xx_i2c.o(i.I2C_Cmd) for I2C_Cmd
     iic.o(i.I2C_WaitEvent) refers to stm32f4xx_i2c.o(i.I2C_CheckEvent) for I2C_CheckEvent
+    iic.o(i.LifeTestReportMismatch) refers to uart.o(i.USART_SendString) for USART_SendString
+    iic.o(i.LifeTestReportMismatch) refers to uart.o(i.USART_SendHex) for USART_SendHex
     iic.o(i.LifeTestStart) refers to uart.o(i.USART_SendString) for USART_SendString
     iic.o(i.LifeTestStart) refers to uart.o(i.USART_SendHex) for USART_SendHex
     iic.o(i.LifeTestStart) refers to iic.o(.data) for life_test_running
     iic.o(i.LifeTestStep) refers to iic.o(i.EEPROM_WriteByte) for EEPROM_WriteByte
+    iic.o(i.LifeTestStep) refers to uart.o(i.USART_SendString) for USART_SendString
+    iic.o(i.LifeTestStep) refers to uart.o(i.USART_SendHex) for USART_SendHex
     iic.o(i.LifeTestStep) refers to iic.o(i.LifeTestStop) for LifeTestStop
     iic.o(i.LifeTestStep) refers to iic.o(i.EEPROM_ReadByte) for EEPROM_ReadByte
-    iic.o(i.LifeTestStep) refers to uart.o(i.USART_SendString) for USART_SendString
+    iic.o(i.LifeTestStep) refers to iic.o(i.LifeTestReportMismatch) for LifeTestReportMismatch
     iic.o(i.LifeTestStep) refers to uart.o(i.USART_SendDec) for USART_SendDec
-    iic.o(i.LifeTestStep) refers to uart.o(i.USART_SendHex) for USART_SendHex
-    iic.o(i.LifeTestStep) refers to iic.o(.data) for life_test_offset
+    iic.o(i.LifeTestStep) refers to iic.o(.data) for life_test_counter
     iic.o(i.LifeTestStop) refers to uart.o(i.USART_SendString) for USART_SendString
     iic.o(i.LifeTestStop) refers to uart.o(i.USART_SendDec) for USART_SendDec
     iic.o(i.LifeTestStop) refers to iic.o(.data) for life_test_running
@@ -223,6 +224,7 @@ Removing Unused input sections from the image.
     Removing stm32f4xx_i2c.o(i.I2C_ARPCmd), (24 bytes).
     Removing stm32f4xx_i2c.o(i.I2C_AnalogFilterCmd), (24 bytes).
     Removing stm32f4xx_i2c.o(i.I2C_CalculatePEC), (24 bytes).
+    Removing stm32f4xx_i2c.o(i.I2C_ClearFlag), (12 bytes).
     Removing stm32f4xx_i2c.o(i.I2C_ClearITPendingBit), (12 bytes).
     Removing stm32f4xx_i2c.o(i.I2C_DMACmd), (24 bytes).
     Removing stm32f4xx_i2c.o(i.I2C_DMALastTransferCmd), (24 bytes).
@@ -559,14 +561,16 @@ Removing Unused input sections from the image.
     Removing stm32f4xx_it.o(.revsh_text), (4 bytes).
     Removing delay.o(.rev16_text), (4 bytes).
     Removing delay.o(.revsh_text), (4 bytes).
+    Removing delay.o(i.Delay_us), (70 bytes).
     Removing key.o(.rev16_text), (4 bytes).
     Removing key.o(.revsh_text), (4 bytes).
     Removing iic.o(.rev16_text), (4 bytes).
     Removing iic.o(.revsh_text), (4 bytes).
+    Removing iic.o(i.EEPROM_WaitReady), (116 bytes).
     Removing uart.o(.rev16_text), (4 bytes).
     Removing uart.o(.revsh_text), (4 bytes).
 
-354 unused section(s) (total 12666 bytes) removed from the image.
+357 unused section(s) (total 12864 bytes) removed from the image.
 
 ==============================================================================
 
@@ -576,19 +580,19 @@ Image Symbol Table
 
     Symbol Name                              Value     Ov Type        Size  Object(Section)
 
-    ../clib/microlib/init/entry.s            0x00000000   Number         0  entry11b.o ABSOLUTE
+    ../clib/microlib/init/entry.s            0x00000000   Number         0  entry8b.o ABSOLUTE
+    ../clib/microlib/init/entry.s            0x00000000   Number         0  entry8a.o ABSOLUTE
     ../clib/microlib/init/entry.s            0x00000000   Number         0  entry2.o ABSOLUTE
-    ../clib/microlib/init/entry.s            0x00000000   Number         0  entry11a.o ABSOLUTE
-    ../clib/microlib/init/entry.s            0x00000000   Number         0  entry10b.o ABSOLUTE
+    ../clib/microlib/init/entry.s            0x00000000   Number         0  entry7b.o ABSOLUTE
     ../clib/microlib/init/entry.s            0x00000000   Number         0  entry7a.o ABSOLUTE
     ../clib/microlib/init/entry.s            0x00000000   Number         0  entry5.o ABSOLUTE
-    ../clib/microlib/init/entry.s            0x00000000   Number         0  entry10a.o ABSOLUTE
-    ../clib/microlib/init/entry.s            0x00000000   Number         0  entry7b.o ABSOLUTE
-    ../clib/microlib/init/entry.s            0x00000000   Number         0  entry8a.o ABSOLUTE
-    ../clib/microlib/init/entry.s            0x00000000   Number         0  entry8b.o ABSOLUTE
-    ../clib/microlib/init/entry.s            0x00000000   Number         0  entry9b.o ABSOLUTE
+    ../clib/microlib/init/entry.s            0x00000000   Number         0  entry11b.o ABSOLUTE
     ../clib/microlib/init/entry.s            0x00000000   Number         0  entry9a.o ABSOLUTE
+    ../clib/microlib/init/entry.s            0x00000000   Number         0  entry11a.o ABSOLUTE
+    ../clib/microlib/init/entry.s            0x00000000   Number         0  entry10b.o ABSOLUTE
     ../clib/microlib/init/entry.s            0x00000000   Number         0  entry.o ABSOLUTE
+    ../clib/microlib/init/entry.s            0x00000000   Number         0  entry10a.o ABSOLUTE
+    ../clib/microlib/init/entry.s            0x00000000   Number         0  entry9b.o ABSOLUTE
     ..\CMSIS\startup_stm32f40_41xxx.s        0x00000000   Number         0  startup_stm32f40_41xxx.o ABSOLUTE
     ..\DEVICE_LIB\src\misc.c                 0x00000000   Number         0  misc.o ABSOLUTE
     ..\DEVICE_LIB\src\stm32f4xx_adc.c        0x00000000   Number         0  stm32f4xx_adc.o ABSOLUTE
@@ -652,102 +656,98 @@ Image Symbol Table
     i.BusFault_Handler                       0x080001e4   Section        0  stm32f4xx_it.o(i.BusFault_Handler)
     i.DebugMon_Handler                       0x080001e8   Section        0  stm32f4xx_it.o(i.DebugMon_Handler)
     i.Delay_ms                               0x080001ea   Section        0  delay.o(i.Delay_ms)
-    i.Delay_us                               0x0800022e   Section        0  delay.o(i.Delay_us)
-    i.EEPROM_LifeTestStep                    0x08000274   Section        0  iic.o(i.EEPROM_LifeTestStep)
-    i.EEPROM_LifeTestToggle                  0x08000288   Section        0  iic.o(i.EEPROM_LifeTestToggle)
-    i.EEPROM_PageTestStep                    0x0800029c   Section        0  iic.o(i.EEPROM_PageTestStep)
-    i.EEPROM_PageTestToggle                  0x080002b0   Section        0  iic.o(i.EEPROM_PageTestToggle)
-    i.EEPROM_ReadByte                        0x080002c4   Section        0  iic.o(i.EEPROM_ReadByte)
-    i.EEPROM_RunSingleAddressDemo            0x080003ac   Section        0  iic.o(i.EEPROM_RunSingleAddressDemo)
-    i.EEPROM_WaitReady                       0x0800056c   Section        0  iic.o(i.EEPROM_WaitReady)
-    EEPROM_WaitReady                         0x0800056d   Thumb Code   100  iic.o(i.EEPROM_WaitReady)
-    i.EEPROM_WriteByte                       0x080005e0   Section        0  iic.o(i.EEPROM_WriteByte)
-    i.GPIO_Init                              0x08000694   Section        0  stm32f4xx_gpio.o(i.GPIO_Init)
-    i.GPIO_PinAFConfig                       0x08000724   Section        0  stm32f4xx_gpio.o(i.GPIO_PinAFConfig)
-    i.GPIO_ReadInputDataBit                  0x0800076a   Section        0  stm32f4xx_gpio.o(i.GPIO_ReadInputDataBit)
-    i.GetDeviceAddress                       0x0800077c   Section        0  iic.o(i.GetDeviceAddress)
-    GetDeviceAddress                         0x0800077d   Thumb Code    16  iic.o(i.GetDeviceAddress)
-    i.HardFault_Handler                      0x0800078c   Section        0  stm32f4xx_it.o(i.HardFault_Handler)
-    i.I2C_AcknowledgeConfig                  0x08000790   Section        0  stm32f4xx_i2c.o(i.I2C_AcknowledgeConfig)
-    i.I2C_CheckEvent                         0x080007a8   Section        0  stm32f4xx_i2c.o(i.I2C_CheckEvent)
-    i.I2C_ClearFlag                          0x080007d2   Section        0  stm32f4xx_i2c.o(i.I2C_ClearFlag)
-    i.I2C_Cmd                                0x080007de   Section        0  stm32f4xx_i2c.o(i.I2C_Cmd)
-    i.I2C_EEPROM_Init                        0x080007f8   Section        0  iic.o(i.I2C_EEPROM_Init)
-    i.I2C_GenerateSTART                      0x0800088c   Section        0  stm32f4xx_i2c.o(i.I2C_GenerateSTART)
-    i.I2C_GenerateSTOP                       0x080008a4   Section        0  stm32f4xx_i2c.o(i.I2C_GenerateSTOP)
-    i.I2C_Init                               0x080008bc   Section        0  stm32f4xx_i2c.o(i.I2C_Init)
-    i.I2C_ReceiveData                        0x080009a4   Section        0  stm32f4xx_i2c.o(i.I2C_ReceiveData)
-    i.I2C_Send7bitAddress                    0x080009ac   Section        0  stm32f4xx_i2c.o(i.I2C_Send7bitAddress)
-    i.I2C_SendData                           0x080009bc   Section        0  stm32f4xx_i2c.o(i.I2C_SendData)
-    i.I2C_WaitEvent                          0x080009c0   Section        0  iic.o(i.I2C_WaitEvent)
-    I2C_WaitEvent                            0x080009c1   Thumb Code    36  iic.o(i.I2C_WaitEvent)
-    i.KEY0_Scan                              0x080009ec   Section        0  key.o(i.KEY0_Scan)
-    i.KEY1_Scan                              0x08000a24   Section        0  key.o(i.KEY1_Scan)
-    i.KEY_Init                               0x08000a5c   Section        0  key.o(i.KEY_Init)
-    i.KEY_Scan                               0x08000ac4   Section        0  key.o(i.KEY_Scan)
-    i.LifeTestStart                          0x08000b00   Section        0  iic.o(i.LifeTestStart)
-    LifeTestStart                            0x08000b01   Thumb Code    64  iic.o(i.LifeTestStart)
-    i.LifeTestStep                           0x08000b90   Section        0  iic.o(i.LifeTestStep)
-    LifeTestStep                             0x08000b91   Thumb Code   202  iic.o(i.LifeTestStep)
-    i.LifeTestStop                           0x08000cb4   Section        0  iic.o(i.LifeTestStop)
-    LifeTestStop                             0x08000cb5   Thumb Code    44  iic.o(i.LifeTestStop)
-    i.MemManage_Handler                      0x08000d1c   Section        0  stm32f4xx_it.o(i.MemManage_Handler)
-    i.NMI_Handler                            0x08000d20   Section        0  stm32f4xx_it.o(i.NMI_Handler)
-    i.PageTestStart                          0x08000d24   Section        0  iic.o(i.PageTestStart)
-    PageTestStart                            0x08000d25   Thumb Code    88  iic.o(i.PageTestStart)
-    i.PageTestStep                           0x08000dc8   Section        0  iic.o(i.PageTestStep)
-    PageTestStep                             0x08000dc9   Thumb Code   228  iic.o(i.PageTestStep)
-    i.PageTestStop                           0x08000f18   Section        0  iic.o(i.PageTestStop)
-    PageTestStop                             0x08000f19   Thumb Code    48  iic.o(i.PageTestStop)
-    i.PendSV_Handler                         0x08000f88   Section        0  stm32f4xx_it.o(i.PendSV_Handler)
-    i.RCC_AHB1PeriphClockCmd                 0x08000f8c   Section        0  stm32f4xx_rcc.o(i.RCC_AHB1PeriphClockCmd)
-    i.RCC_APB1PeriphClockCmd                 0x08000fac   Section        0  stm32f4xx_rcc.o(i.RCC_APB1PeriphClockCmd)
-    i.RCC_APB2PeriphClockCmd                 0x08000fcc   Section        0  stm32f4xx_rcc.o(i.RCC_APB2PeriphClockCmd)
-    i.RCC_DeInit                             0x08000fec   Section        0  stm32f4xx_rcc.o(i.RCC_DeInit)
-    i.RCC_GetClocksFreq                      0x08001050   Section        0  stm32f4xx_rcc.o(i.RCC_GetClocksFreq)
-    i.RCC_GetFlagStatus                      0x08001138   Section        0  stm32f4xx_rcc.o(i.RCC_GetFlagStatus)
-    i.RCC_GetSYSCLKSource                    0x08001178   Section        0  stm32f4xx_rcc.o(i.RCC_GetSYSCLKSource)
-    i.RCC_HCLKConfig                         0x08001188   Section        0  stm32f4xx_rcc.o(i.RCC_HCLKConfig)
-    i.RCC_HSEConfig                          0x080011a0   Section        0  stm32f4xx_rcc.o(i.RCC_HSEConfig)
-    i.RCC_PCLK1Config                        0x080011b0   Section        0  stm32f4xx_rcc.o(i.RCC_PCLK1Config)
-    i.RCC_PCLK2Config                        0x080011c8   Section        0  stm32f4xx_rcc.o(i.RCC_PCLK2Config)
-    i.RCC_PLLCmd                             0x080011e0   Section        0  stm32f4xx_rcc.o(i.RCC_PLLCmd)
-    i.RCC_PLLConfig                          0x080011ec   Section        0  stm32f4xx_rcc.o(i.RCC_PLLConfig)
-    i.RCC_SYSCLKConfig                       0x08001210   Section        0  stm32f4xx_rcc.o(i.RCC_SYSCLKConfig)
-    i.SVC_Handler                            0x08001228   Section        0  stm32f4xx_it.o(i.SVC_Handler)
-    i.SetSysClock                            0x0800122c   Section        0  system_stm32f4xx.o(i.SetSysClock)
-    SetSysClock                              0x0800122d   Thumb Code   220  system_stm32f4xx.o(i.SetSysClock)
-    i.SysTick_CLKSourceConfig                0x08001318   Section        0  misc.o(i.SysTick_CLKSourceConfig)
-    i.SysTick_Handler                        0x08001340   Section        0  stm32f4xx_it.o(i.SysTick_Handler)
-    i.SysTick_Init                           0x08001342   Section        0  delay.o(i.SysTick_Init)
-    i.SystemClock_Config                     0x0800134e   Section        0  main.o(i.SystemClock_Config)
-    i.SystemCoreClockUpdate                  0x080013b8   Section        0  system_stm32f4xx.o(i.SystemCoreClockUpdate)
-    i.SystemInit                             0x08001478   Section        0  system_stm32f4xx.o(i.SystemInit)
-    i.USART1_Init                            0x080014e0   Section        0  uart.o(i.USART1_Init)
-    i.USART_Cmd                              0x08001568   Section        0  stm32f4xx_usart.o(i.USART_Cmd)
-    i.USART_GetFlagStatus                    0x08001580   Section        0  stm32f4xx_usart.o(i.USART_GetFlagStatus)
-    i.USART_Init                             0x0800159c   Section        0  stm32f4xx_usart.o(i.USART_Init)
-    i.USART_SendChar                         0x08001670   Section        0  uart.o(i.USART_SendChar)
-    i.USART_SendData                         0x08001690   Section        0  stm32f4xx_usart.o(i.USART_SendData)
-    i.USART_SendDec                          0x08001698   Section        0  uart.o(i.USART_SendDec)
-    i.USART_SendHex                          0x080016e4   Section        0  uart.o(i.USART_SendHex)
-    i.USART_SendString                       0x08001724   Section        0  uart.o(i.USART_SendString)
-    i.UsageFault_Handler                     0x0800173c   Section        0  stm32f4xx_it.o(i.UsageFault_Handler)
-    i.__scatterload_copy                     0x08001740   Section       14  handlers.o(i.__scatterload_copy)
-    i.__scatterload_null                     0x0800174e   Section        2  handlers.o(i.__scatterload_null)
-    i.__scatterload_zeroinit                 0x08001750   Section       14  handlers.o(i.__scatterload_zeroinit)
-    i.main                                   0x08001760   Section        0  main.o(i.main)
-    .constdata                               0x0800183c   Section       17  uart.o(.constdata)
-    table                                    0x0800183c   Data          17  uart.o(.constdata)
+    i.EEPROM_LifeTestStep                    0x08000230   Section        0  iic.o(i.EEPROM_LifeTestStep)
+    i.EEPROM_LifeTestToggle                  0x08000244   Section        0  iic.o(i.EEPROM_LifeTestToggle)
+    i.EEPROM_PageTestStep                    0x08000258   Section        0  iic.o(i.EEPROM_PageTestStep)
+    i.EEPROM_PageTestToggle                  0x0800026c   Section        0  iic.o(i.EEPROM_PageTestToggle)
+    i.EEPROM_ReadByte                        0x08000280   Section        0  iic.o(i.EEPROM_ReadByte)
+    i.EEPROM_RunSingleAddressDemo            0x08000368   Section        0  iic.o(i.EEPROM_RunSingleAddressDemo)
+    i.EEPROM_WriteByte                       0x08000528   Section        0  iic.o(i.EEPROM_WriteByte)
+    i.GPIO_Init                              0x080005cc   Section        0  stm32f4xx_gpio.o(i.GPIO_Init)
+    i.GPIO_PinAFConfig                       0x0800065c   Section        0  stm32f4xx_gpio.o(i.GPIO_PinAFConfig)
+    i.GPIO_ReadInputDataBit                  0x080006a2   Section        0  stm32f4xx_gpio.o(i.GPIO_ReadInputDataBit)
+    i.GetDeviceAddress                       0x080006b4   Section        0  iic.o(i.GetDeviceAddress)
+    GetDeviceAddress                         0x080006b5   Thumb Code     6  iic.o(i.GetDeviceAddress)
+    i.HardFault_Handler                      0x080006ba   Section        0  stm32f4xx_it.o(i.HardFault_Handler)
+    i.I2C_AcknowledgeConfig                  0x080006be   Section        0  stm32f4xx_i2c.o(i.I2C_AcknowledgeConfig)
+    i.I2C_CheckEvent                         0x080006d6   Section        0  stm32f4xx_i2c.o(i.I2C_CheckEvent)
+    i.I2C_Cmd                                0x08000700   Section        0  stm32f4xx_i2c.o(i.I2C_Cmd)
+    i.I2C_EEPROM_Init                        0x08000718   Section        0  iic.o(i.I2C_EEPROM_Init)
+    i.I2C_GenerateSTART                      0x080007ac   Section        0  stm32f4xx_i2c.o(i.I2C_GenerateSTART)
+    i.I2C_GenerateSTOP                       0x080007c4   Section        0  stm32f4xx_i2c.o(i.I2C_GenerateSTOP)
+    i.I2C_Init                               0x080007dc   Section        0  stm32f4xx_i2c.o(i.I2C_Init)
+    i.I2C_ReceiveData                        0x080008c4   Section        0  stm32f4xx_i2c.o(i.I2C_ReceiveData)
+    i.I2C_Send7bitAddress                    0x080008cc   Section        0  stm32f4xx_i2c.o(i.I2C_Send7bitAddress)
+    i.I2C_SendData                           0x080008dc   Section        0  stm32f4xx_i2c.o(i.I2C_SendData)
+    i.I2C_WaitEvent                          0x080008e0   Section        0  iic.o(i.I2C_WaitEvent)
+    I2C_WaitEvent                            0x080008e1   Thumb Code    36  iic.o(i.I2C_WaitEvent)
+    i.KEY0_Scan                              0x0800090c   Section        0  key.o(i.KEY0_Scan)
+    i.KEY1_Scan                              0x08000944   Section        0  key.o(i.KEY1_Scan)
+    i.KEY_Init                               0x0800097c   Section        0  key.o(i.KEY_Init)
+    i.KEY_Scan                               0x080009e4   Section        0  key.o(i.KEY_Scan)
+    i.LifeTestReportMismatch                 0x08000a20   Section        0  iic.o(i.LifeTestReportMismatch)
+    LifeTestReportMismatch                   0x08000a21   Thumb Code    76  iic.o(i.LifeTestReportMismatch)
+    i.LifeTestStart                          0x08000aa8   Section        0  iic.o(i.LifeTestStart)
+    LifeTestStart                            0x08000aa9   Thumb Code    78  iic.o(i.LifeTestStart)
+    i.LifeTestStep                           0x08000b44   Section        0  iic.o(i.LifeTestStep)
+    LifeTestStep                             0x08000b45   Thumb Code   324  iic.o(i.LifeTestStep)
+    i.LifeTestStop                           0x08000d94   Section        0  iic.o(i.LifeTestStop)
+    LifeTestStop                             0x08000d95   Thumb Code    44  iic.o(i.LifeTestStop)
+    i.MemManage_Handler                      0x08000e04   Section        0  stm32f4xx_it.o(i.MemManage_Handler)
+    i.NMI_Handler                            0x08000e08   Section        0  stm32f4xx_it.o(i.NMI_Handler)
+    i.PageTestStart                          0x08000e0c   Section        0  iic.o(i.PageTestStart)
+    PageTestStart                            0x08000e0d   Thumb Code    88  iic.o(i.PageTestStart)
+    i.PageTestStep                           0x08000eb0   Section        0  iic.o(i.PageTestStep)
+    PageTestStep                             0x08000eb1   Thumb Code   228  iic.o(i.PageTestStep)
+    i.PageTestStop                           0x08001000   Section        0  iic.o(i.PageTestStop)
+    PageTestStop                             0x08001001   Thumb Code    48  iic.o(i.PageTestStop)
+    i.PendSV_Handler                         0x08001070   Section        0  stm32f4xx_it.o(i.PendSV_Handler)
+    i.RCC_AHB1PeriphClockCmd                 0x08001074   Section        0  stm32f4xx_rcc.o(i.RCC_AHB1PeriphClockCmd)
+    i.RCC_APB1PeriphClockCmd                 0x08001094   Section        0  stm32f4xx_rcc.o(i.RCC_APB1PeriphClockCmd)
+    i.RCC_APB2PeriphClockCmd                 0x080010b4   Section        0  stm32f4xx_rcc.o(i.RCC_APB2PeriphClockCmd)
+    i.RCC_DeInit                             0x080010d4   Section        0  stm32f4xx_rcc.o(i.RCC_DeInit)
+    i.RCC_GetClocksFreq                      0x08001138   Section        0  stm32f4xx_rcc.o(i.RCC_GetClocksFreq)
+    i.RCC_GetFlagStatus                      0x08001220   Section        0  stm32f4xx_rcc.o(i.RCC_GetFlagStatus)
+    i.RCC_GetSYSCLKSource                    0x08001260   Section        0  stm32f4xx_rcc.o(i.RCC_GetSYSCLKSource)
+    i.RCC_HCLKConfig                         0x08001270   Section        0  stm32f4xx_rcc.o(i.RCC_HCLKConfig)
+    i.RCC_HSEConfig                          0x08001288   Section        0  stm32f4xx_rcc.o(i.RCC_HSEConfig)
+    i.RCC_PCLK1Config                        0x08001298   Section        0  stm32f4xx_rcc.o(i.RCC_PCLK1Config)
+    i.RCC_PCLK2Config                        0x080012b0   Section        0  stm32f4xx_rcc.o(i.RCC_PCLK2Config)
+    i.RCC_PLLCmd                             0x080012c8   Section        0  stm32f4xx_rcc.o(i.RCC_PLLCmd)
+    i.RCC_PLLConfig                          0x080012d4   Section        0  stm32f4xx_rcc.o(i.RCC_PLLConfig)
+    i.RCC_SYSCLKConfig                       0x080012f8   Section        0  stm32f4xx_rcc.o(i.RCC_SYSCLKConfig)
+    i.SVC_Handler                            0x08001310   Section        0  stm32f4xx_it.o(i.SVC_Handler)
+    i.SetSysClock                            0x08001314   Section        0  system_stm32f4xx.o(i.SetSysClock)
+    SetSysClock                              0x08001315   Thumb Code   220  system_stm32f4xx.o(i.SetSysClock)
+    i.SysTick_CLKSourceConfig                0x08001400   Section        0  misc.o(i.SysTick_CLKSourceConfig)
+    i.SysTick_Handler                        0x08001428   Section        0  stm32f4xx_it.o(i.SysTick_Handler)
+    i.SysTick_Init                           0x0800142a   Section        0  delay.o(i.SysTick_Init)
+    i.SystemClock_Config                     0x08001436   Section        0  main.o(i.SystemClock_Config)
+    i.SystemCoreClockUpdate                  0x080014a0   Section        0  system_stm32f4xx.o(i.SystemCoreClockUpdate)
+    i.SystemInit                             0x08001560   Section        0  system_stm32f4xx.o(i.SystemInit)
+    i.USART1_Init                            0x080015c8   Section        0  uart.o(i.USART1_Init)
+    i.USART_Cmd                              0x08001650   Section        0  stm32f4xx_usart.o(i.USART_Cmd)
+    i.USART_GetFlagStatus                    0x08001668   Section        0  stm32f4xx_usart.o(i.USART_GetFlagStatus)
+    i.USART_Init                             0x08001684   Section        0  stm32f4xx_usart.o(i.USART_Init)
+    i.USART_SendChar                         0x08001758   Section        0  uart.o(i.USART_SendChar)
+    i.USART_SendData                         0x08001778   Section        0  stm32f4xx_usart.o(i.USART_SendData)
+    i.USART_SendDec                          0x08001780   Section        0  uart.o(i.USART_SendDec)
+    i.USART_SendHex                          0x080017cc   Section        0  uart.o(i.USART_SendHex)
+    i.USART_SendString                       0x0800180c   Section        0  uart.o(i.USART_SendString)
+    i.UsageFault_Handler                     0x08001824   Section        0  stm32f4xx_it.o(i.UsageFault_Handler)
+    i.__scatterload_copy                     0x08001828   Section       14  handlers.o(i.__scatterload_copy)
+    i.__scatterload_null                     0x08001836   Section        2  handlers.o(i.__scatterload_null)
+    i.__scatterload_zeroinit                 0x08001838   Section       14  handlers.o(i.__scatterload_zeroinit)
+    i.main                                   0x08001848   Section        0  main.o(i.main)
+    .constdata                               0x0800193c   Section       17  uart.o(.constdata)
+    table                                    0x0800193c   Data          17  uart.o(.constdata)
     .data                                    0x20000000   Section       16  stm32f4xx_rcc.o(.data)
     APBAHBPrescTable                         0x20000000   Data          16  stm32f4xx_rcc.o(.data)
     .data                                    0x20000010   Section       20  system_stm32f4xx.o(.data)
     .data                                    0x20000024   Section       18  iic.o(.data)
     life_test_running                        0x20000024   Data           1  iic.o(.data)
     life_test_counter                        0x20000028   Data           4  iic.o(.data)
-    life_test_phase                          0x2000002c   Data           1  iic.o(.data)
-    life_test_offset                         0x2000002d   Data           1  iic.o(.data)
-    page_test_running                        0x2000002e   Data           1  iic.o(.data)
+    page_test_running                        0x2000002c   Data           1  iic.o(.data)
     page_test_counter                        0x20000030   Data           4  iic.o(.data)
     page_test_pattern                        0x20000034   Data           1  iic.o(.data)
     page_stop_request                        0x20000035   Data           1  iic.o(.data)
@@ -864,73 +864,71 @@ Image Symbol Table
     BusFault_Handler                         0x080001e5   Thumb Code     4  stm32f4xx_it.o(i.BusFault_Handler)
     DebugMon_Handler                         0x080001e9   Thumb Code     2  stm32f4xx_it.o(i.DebugMon_Handler)
     Delay_ms                                 0x080001eb   Thumb Code    68  delay.o(i.Delay_ms)
-    Delay_us                                 0x0800022f   Thumb Code    70  delay.o(i.Delay_us)
-    EEPROM_LifeTestStep                      0x08000275   Thumb Code    14  iic.o(i.EEPROM_LifeTestStep)
-    EEPROM_LifeTestToggle                    0x08000289   Thumb Code    14  iic.o(i.EEPROM_LifeTestToggle)
-    EEPROM_PageTestStep                      0x0800029d   Thumb Code    14  iic.o(i.EEPROM_PageTestStep)
-    EEPROM_PageTestToggle                    0x080002b1   Thumb Code    14  iic.o(i.EEPROM_PageTestToggle)
-    EEPROM_ReadByte                          0x080002c5   Thumb Code   220  iic.o(i.EEPROM_ReadByte)
-    EEPROM_RunSingleAddressDemo              0x080003ad   Thumb Code   196  iic.o(i.EEPROM_RunSingleAddressDemo)
-    EEPROM_WriteByte                         0x080005e1   Thumb Code   168  iic.o(i.EEPROM_WriteByte)
-    GPIO_Init                                0x08000695   Thumb Code   144  stm32f4xx_gpio.o(i.GPIO_Init)
-    GPIO_PinAFConfig                         0x08000725   Thumb Code    70  stm32f4xx_gpio.o(i.GPIO_PinAFConfig)
-    GPIO_ReadInputDataBit                    0x0800076b   Thumb Code    18  stm32f4xx_gpio.o(i.GPIO_ReadInputDataBit)
-    HardFault_Handler                        0x0800078d   Thumb Code     4  stm32f4xx_it.o(i.HardFault_Handler)
-    I2C_AcknowledgeConfig                    0x08000791   Thumb Code    24  stm32f4xx_i2c.o(i.I2C_AcknowledgeConfig)
-    I2C_CheckEvent                           0x080007a9   Thumb Code    42  stm32f4xx_i2c.o(i.I2C_CheckEvent)
-    I2C_ClearFlag                            0x080007d3   Thumb Code    12  stm32f4xx_i2c.o(i.I2C_ClearFlag)
-    I2C_Cmd                                  0x080007df   Thumb Code    24  stm32f4xx_i2c.o(i.I2C_Cmd)
-    I2C_EEPROM_Init                          0x080007f9   Thumb Code   136  iic.o(i.I2C_EEPROM_Init)
-    I2C_GenerateSTART                        0x0800088d   Thumb Code    24  stm32f4xx_i2c.o(i.I2C_GenerateSTART)
-    I2C_GenerateSTOP                         0x080008a5   Thumb Code    24  stm32f4xx_i2c.o(i.I2C_GenerateSTOP)
-    I2C_Init                                 0x080008bd   Thumb Code   218  stm32f4xx_i2c.o(i.I2C_Init)
-    I2C_ReceiveData                          0x080009a5   Thumb Code     8  stm32f4xx_i2c.o(i.I2C_ReceiveData)
-    I2C_Send7bitAddress                      0x080009ad   Thumb Code    16  stm32f4xx_i2c.o(i.I2C_Send7bitAddress)
-    I2C_SendData                             0x080009bd   Thumb Code     4  stm32f4xx_i2c.o(i.I2C_SendData)
-    KEY0_Scan                                0x080009ed   Thumb Code    50  key.o(i.KEY0_Scan)
-    KEY1_Scan                                0x08000a25   Thumb Code    50  key.o(i.KEY1_Scan)
-    KEY_Init                                 0x08000a5d   Thumb Code    96  key.o(i.KEY_Init)
-    KEY_Scan                                 0x08000ac5   Thumb Code    54  key.o(i.KEY_Scan)
-    MemManage_Handler                        0x08000d1d   Thumb Code     4  stm32f4xx_it.o(i.MemManage_Handler)
-    NMI_Handler                              0x08000d21   Thumb Code     2  stm32f4xx_it.o(i.NMI_Handler)
-    PendSV_Handler                           0x08000f89   Thumb Code     2  stm32f4xx_it.o(i.PendSV_Handler)
-    RCC_AHB1PeriphClockCmd                   0x08000f8d   Thumb Code    26  stm32f4xx_rcc.o(i.RCC_AHB1PeriphClockCmd)
-    RCC_APB1PeriphClockCmd                   0x08000fad   Thumb Code    26  stm32f4xx_rcc.o(i.RCC_APB1PeriphClockCmd)
-    RCC_APB2PeriphClockCmd                   0x08000fcd   Thumb Code    26  stm32f4xx_rcc.o(i.RCC_APB2PeriphClockCmd)
-    RCC_DeInit                               0x08000fed   Thumb Code    82  stm32f4xx_rcc.o(i.RCC_DeInit)
-    RCC_GetClocksFreq                        0x08001051   Thumb Code   214  stm32f4xx_rcc.o(i.RCC_GetClocksFreq)
-    RCC_GetFlagStatus                        0x08001139   Thumb Code    60  stm32f4xx_rcc.o(i.RCC_GetFlagStatus)
-    RCC_GetSYSCLKSource                      0x08001179   Thumb Code    10  stm32f4xx_rcc.o(i.RCC_GetSYSCLKSource)
-    RCC_HCLKConfig                           0x08001189   Thumb Code    18  stm32f4xx_rcc.o(i.RCC_HCLKConfig)
-    RCC_HSEConfig                            0x080011a1   Thumb Code    12  stm32f4xx_rcc.o(i.RCC_HSEConfig)
-    RCC_PCLK1Config                          0x080011b1   Thumb Code    18  stm32f4xx_rcc.o(i.RCC_PCLK1Config)
-    RCC_PCLK2Config                          0x080011c9   Thumb Code    20  stm32f4xx_rcc.o(i.RCC_PCLK2Config)
-    RCC_PLLCmd                               0x080011e1   Thumb Code     6  stm32f4xx_rcc.o(i.RCC_PLLCmd)
-    RCC_PLLConfig                            0x080011ed   Thumb Code    30  stm32f4xx_rcc.o(i.RCC_PLLConfig)
-    RCC_SYSCLKConfig                         0x08001211   Thumb Code    18  stm32f4xx_rcc.o(i.RCC_SYSCLKConfig)
-    SVC_Handler                              0x08001229   Thumb Code     2  stm32f4xx_it.o(i.SVC_Handler)
-    SysTick_CLKSourceConfig                  0x08001319   Thumb Code    40  misc.o(i.SysTick_CLKSourceConfig)
-    SysTick_Handler                          0x08001341   Thumb Code     2  stm32f4xx_it.o(i.SysTick_Handler)
-    SysTick_Init                             0x08001343   Thumb Code    12  delay.o(i.SysTick_Init)
-    SystemClock_Config                       0x0800134f   Thumb Code   104  main.o(i.SystemClock_Config)
-    SystemCoreClockUpdate                    0x080013b9   Thumb Code   170  system_stm32f4xx.o(i.SystemCoreClockUpdate)
-    SystemInit                               0x08001479   Thumb Code    88  system_stm32f4xx.o(i.SystemInit)
-    USART1_Init                              0x080014e1   Thumb Code   128  uart.o(i.USART1_Init)
-    USART_Cmd                                0x08001569   Thumb Code    24  stm32f4xx_usart.o(i.USART_Cmd)
-    USART_GetFlagStatus                      0x08001581   Thumb Code    26  stm32f4xx_usart.o(i.USART_GetFlagStatus)
-    USART_Init                               0x0800159d   Thumb Code   204  stm32f4xx_usart.o(i.USART_Init)
-    USART_SendChar                           0x08001671   Thumb Code    28  uart.o(i.USART_SendChar)
-    USART_SendData                           0x08001691   Thumb Code     8  stm32f4xx_usart.o(i.USART_SendData)
-    USART_SendDec                            0x08001699   Thumb Code    76  uart.o(i.USART_SendDec)
-    USART_SendHex                            0x080016e5   Thumb Code    54  uart.o(i.USART_SendHex)
-    USART_SendString                         0x08001725   Thumb Code    24  uart.o(i.USART_SendString)
-    UsageFault_Handler                       0x0800173d   Thumb Code     4  stm32f4xx_it.o(i.UsageFault_Handler)
-    __scatterload_copy                       0x08001741   Thumb Code    14  handlers.o(i.__scatterload_copy)
-    __scatterload_null                       0x0800174f   Thumb Code     2  handlers.o(i.__scatterload_null)
-    __scatterload_zeroinit                   0x08001751   Thumb Code    14  handlers.o(i.__scatterload_zeroinit)
-    main                                     0x08001761   Thumb Code    92  main.o(i.main)
-    Region$$Table$$Base                      0x08001850   Number         0  anon$$obj.o(Region$$Table)
-    Region$$Table$$Limit                     0x08001870   Number         0  anon$$obj.o(Region$$Table)
+    EEPROM_LifeTestStep                      0x08000231   Thumb Code    14  iic.o(i.EEPROM_LifeTestStep)
+    EEPROM_LifeTestToggle                    0x08000245   Thumb Code    14  iic.o(i.EEPROM_LifeTestToggle)
+    EEPROM_PageTestStep                      0x08000259   Thumb Code    14  iic.o(i.EEPROM_PageTestStep)
+    EEPROM_PageTestToggle                    0x0800026d   Thumb Code    14  iic.o(i.EEPROM_PageTestToggle)
+    EEPROM_ReadByte                          0x08000281   Thumb Code   220  iic.o(i.EEPROM_ReadByte)
+    EEPROM_RunSingleAddressDemo              0x08000369   Thumb Code   194  iic.o(i.EEPROM_RunSingleAddressDemo)
+    EEPROM_WriteByte                         0x08000529   Thumb Code   150  iic.o(i.EEPROM_WriteByte)
+    GPIO_Init                                0x080005cd   Thumb Code   144  stm32f4xx_gpio.o(i.GPIO_Init)
+    GPIO_PinAFConfig                         0x0800065d   Thumb Code    70  stm32f4xx_gpio.o(i.GPIO_PinAFConfig)
+    GPIO_ReadInputDataBit                    0x080006a3   Thumb Code    18  stm32f4xx_gpio.o(i.GPIO_ReadInputDataBit)
+    HardFault_Handler                        0x080006bb   Thumb Code     4  stm32f4xx_it.o(i.HardFault_Handler)
+    I2C_AcknowledgeConfig                    0x080006bf   Thumb Code    24  stm32f4xx_i2c.o(i.I2C_AcknowledgeConfig)
+    I2C_CheckEvent                           0x080006d7   Thumb Code    42  stm32f4xx_i2c.o(i.I2C_CheckEvent)
+    I2C_Cmd                                  0x08000701   Thumb Code    24  stm32f4xx_i2c.o(i.I2C_Cmd)
+    I2C_EEPROM_Init                          0x08000719   Thumb Code   136  iic.o(i.I2C_EEPROM_Init)
+    I2C_GenerateSTART                        0x080007ad   Thumb Code    24  stm32f4xx_i2c.o(i.I2C_GenerateSTART)
+    I2C_GenerateSTOP                         0x080007c5   Thumb Code    24  stm32f4xx_i2c.o(i.I2C_GenerateSTOP)
+    I2C_Init                                 0x080007dd   Thumb Code   218  stm32f4xx_i2c.o(i.I2C_Init)
+    I2C_ReceiveData                          0x080008c5   Thumb Code     8  stm32f4xx_i2c.o(i.I2C_ReceiveData)
+    I2C_Send7bitAddress                      0x080008cd   Thumb Code    16  stm32f4xx_i2c.o(i.I2C_Send7bitAddress)
+    I2C_SendData                             0x080008dd   Thumb Code     4  stm32f4xx_i2c.o(i.I2C_SendData)
+    KEY0_Scan                                0x0800090d   Thumb Code    50  key.o(i.KEY0_Scan)
+    KEY1_Scan                                0x08000945   Thumb Code    50  key.o(i.KEY1_Scan)
+    KEY_Init                                 0x0800097d   Thumb Code    96  key.o(i.KEY_Init)
+    KEY_Scan                                 0x080009e5   Thumb Code    54  key.o(i.KEY_Scan)
+    MemManage_Handler                        0x08000e05   Thumb Code     4  stm32f4xx_it.o(i.MemManage_Handler)
+    NMI_Handler                              0x08000e09   Thumb Code     2  stm32f4xx_it.o(i.NMI_Handler)
+    PendSV_Handler                           0x08001071   Thumb Code     2  stm32f4xx_it.o(i.PendSV_Handler)
+    RCC_AHB1PeriphClockCmd                   0x08001075   Thumb Code    26  stm32f4xx_rcc.o(i.RCC_AHB1PeriphClockCmd)
+    RCC_APB1PeriphClockCmd                   0x08001095   Thumb Code    26  stm32f4xx_rcc.o(i.RCC_APB1PeriphClockCmd)
+    RCC_APB2PeriphClockCmd                   0x080010b5   Thumb Code    26  stm32f4xx_rcc.o(i.RCC_APB2PeriphClockCmd)
+    RCC_DeInit                               0x080010d5   Thumb Code    82  stm32f4xx_rcc.o(i.RCC_DeInit)
+    RCC_GetClocksFreq                        0x08001139   Thumb Code   214  stm32f4xx_rcc.o(i.RCC_GetClocksFreq)
+    RCC_GetFlagStatus                        0x08001221   Thumb Code    60  stm32f4xx_rcc.o(i.RCC_GetFlagStatus)
+    RCC_GetSYSCLKSource                      0x08001261   Thumb Code    10  stm32f4xx_rcc.o(i.RCC_GetSYSCLKSource)
+    RCC_HCLKConfig                           0x08001271   Thumb Code    18  stm32f4xx_rcc.o(i.RCC_HCLKConfig)
+    RCC_HSEConfig                            0x08001289   Thumb Code    12  stm32f4xx_rcc.o(i.RCC_HSEConfig)
+    RCC_PCLK1Config                          0x08001299   Thumb Code    18  stm32f4xx_rcc.o(i.RCC_PCLK1Config)
+    RCC_PCLK2Config                          0x080012b1   Thumb Code    20  stm32f4xx_rcc.o(i.RCC_PCLK2Config)
+    RCC_PLLCmd                               0x080012c9   Thumb Code     6  stm32f4xx_rcc.o(i.RCC_PLLCmd)
+    RCC_PLLConfig                            0x080012d5   Thumb Code    30  stm32f4xx_rcc.o(i.RCC_PLLConfig)
+    RCC_SYSCLKConfig                         0x080012f9   Thumb Code    18  stm32f4xx_rcc.o(i.RCC_SYSCLKConfig)
+    SVC_Handler                              0x08001311   Thumb Code     2  stm32f4xx_it.o(i.SVC_Handler)
+    SysTick_CLKSourceConfig                  0x08001401   Thumb Code    40  misc.o(i.SysTick_CLKSourceConfig)
+    SysTick_Handler                          0x08001429   Thumb Code     2  stm32f4xx_it.o(i.SysTick_Handler)
+    SysTick_Init                             0x0800142b   Thumb Code    12  delay.o(i.SysTick_Init)
+    SystemClock_Config                       0x08001437   Thumb Code   104  main.o(i.SystemClock_Config)
+    SystemCoreClockUpdate                    0x080014a1   Thumb Code   170  system_stm32f4xx.o(i.SystemCoreClockUpdate)
+    SystemInit                               0x08001561   Thumb Code    88  system_stm32f4xx.o(i.SystemInit)
+    USART1_Init                              0x080015c9   Thumb Code   128  uart.o(i.USART1_Init)
+    USART_Cmd                                0x08001651   Thumb Code    24  stm32f4xx_usart.o(i.USART_Cmd)
+    USART_GetFlagStatus                      0x08001669   Thumb Code    26  stm32f4xx_usart.o(i.USART_GetFlagStatus)
+    USART_Init                               0x08001685   Thumb Code   204  stm32f4xx_usart.o(i.USART_Init)
+    USART_SendChar                           0x08001759   Thumb Code    28  uart.o(i.USART_SendChar)
+    USART_SendData                           0x08001779   Thumb Code     8  stm32f4xx_usart.o(i.USART_SendData)
+    USART_SendDec                            0x08001781   Thumb Code    76  uart.o(i.USART_SendDec)
+    USART_SendHex                            0x080017cd   Thumb Code    54  uart.o(i.USART_SendHex)
+    USART_SendString                         0x0800180d   Thumb Code    24  uart.o(i.USART_SendString)
+    UsageFault_Handler                       0x08001825   Thumb Code     4  stm32f4xx_it.o(i.UsageFault_Handler)
+    __scatterload_copy                       0x08001829   Thumb Code    14  handlers.o(i.__scatterload_copy)
+    __scatterload_null                       0x08001837   Thumb Code     2  handlers.o(i.__scatterload_null)
+    __scatterload_zeroinit                   0x08001839   Thumb Code    14  handlers.o(i.__scatterload_zeroinit)
+    main                                     0x08001849   Thumb Code   104  main.o(i.main)
+    Region$$Table$$Base                      0x08001950   Number         0  anon$$obj.o(Region$$Table)
+    Region$$Table$$Limit                     0x08001970   Number         0  anon$$obj.o(Region$$Table)
     SystemCoreClock                          0x20000010   Data           4  system_stm32f4xx.o(.data)
     AHBPrescTable                            0x20000014   Data          16  system_stm32f4xx.o(.data)
     __initial_sp                             0x20002038   Data           0  startup_stm32f40_41xxx.o(STACK)
@@ -943,123 +941,121 @@ Memory Map of the image
 
   Image Entry point : 0x08000189
 
-  Load Region LR_IROM1 (Base: 0x08000000, Size: 0x000018a8, Max: 0x00080000, ABSOLUTE)
+  Load Region LR_IROM1 (Base: 0x08000000, Size: 0x000019a8, Max: 0x00080000, ABSOLUTE)
 
-    Execution Region ER_IROM1 (Exec base: 0x08000000, Load base: 0x08000000, Size: 0x00001870, Max: 0x00080000, ABSOLUTE)
+    Execution Region ER_IROM1 (Base: 0x08000000, Size: 0x00001970, Max: 0x00080000, ABSOLUTE)
 
-    Exec Addr    Load Addr    Size         Type   Attr      Idx    E Section Name        Object
+    Base Addr    Size         Type   Attr      Idx    E Section Name        Object
 
-    0x08000000   0x08000000   0x00000188   Data   RO            3    RESET               startup_stm32f40_41xxx.o
-    0x08000188   0x08000188   0x00000000   Code   RO         2761  * .ARM.Collect$$$$00000000  mc_w.l(entry.o)
-    0x08000188   0x08000188   0x00000004   Code   RO         2764    .ARM.Collect$$$$00000001  mc_w.l(entry2.o)
-    0x0800018c   0x0800018c   0x00000004   Code   RO         2767    .ARM.Collect$$$$00000004  mc_w.l(entry5.o)
-    0x08000190   0x08000190   0x00000000   Code   RO         2769    .ARM.Collect$$$$00000008  mc_w.l(entry7b.o)
-    0x08000190   0x08000190   0x00000000   Code   RO         2771    .ARM.Collect$$$$0000000A  mc_w.l(entry8b.o)
-    0x08000190   0x08000190   0x00000008   Code   RO         2772    .ARM.Collect$$$$0000000B  mc_w.l(entry9a.o)
-    0x08000198   0x08000198   0x00000000   Code   RO         2774    .ARM.Collect$$$$0000000D  mc_w.l(entry10a.o)
-    0x08000198   0x08000198   0x00000000   Code   RO         2776    .ARM.Collect$$$$0000000F  mc_w.l(entry11a.o)
-    0x08000198   0x08000198   0x00000004   Code   RO         2765    .ARM.Collect$$$$00002712  mc_w.l(entry2.o)
-    0x0800019c   0x0800019c   0x00000024   Code   RO            4    .text               startup_stm32f40_41xxx.o
-    0x080001c0   0x080001c0   0x00000024   Code   RO         2778    .text               mc_w.l(init.o)
-    0x080001e4   0x080001e4   0x00000004   Code   RO         2453    i.BusFault_Handler  stm32f4xx_it.o
-    0x080001e8   0x080001e8   0x00000002   Code   RO         2454    i.DebugMon_Handler  stm32f4xx_it.o
-    0x080001ea   0x080001ea   0x00000044   Code   RO         2524    i.Delay_ms          delay.o
-    0x0800022e   0x0800022e   0x00000046   Code   RO         2525    i.Delay_us          delay.o
-    0x08000274   0x08000274   0x00000014   Code   RO         2600    i.EEPROM_LifeTestStep  iic.o
-    0x08000288   0x08000288   0x00000014   Code   RO         2601    i.EEPROM_LifeTestToggle  iic.o
-    0x0800029c   0x0800029c   0x00000014   Code   RO         2602    i.EEPROM_PageTestStep  iic.o
-    0x080002b0   0x080002b0   0x00000014   Code   RO         2603    i.EEPROM_PageTestToggle  iic.o
-    0x080002c4   0x080002c4   0x000000e8   Code   RO         2604    i.EEPROM_ReadByte   iic.o
-    0x080003ac   0x080003ac   0x000001c0   Code   RO         2605    i.EEPROM_RunSingleAddressDemo  iic.o
-    0x0800056c   0x0800056c   0x00000074   Code   RO         2606    i.EEPROM_WaitReady  iic.o
-    0x080005e0   0x080005e0   0x000000b4   Code   RO         2607    i.EEPROM_WriteByte  iic.o
-    0x08000694   0x08000694   0x00000090   Code   RO          386    i.GPIO_Init         stm32f4xx_gpio.o
-    0x08000724   0x08000724   0x00000046   Code   RO          387    i.GPIO_PinAFConfig  stm32f4xx_gpio.o
-    0x0800076a   0x0800076a   0x00000012   Code   RO          390    i.GPIO_ReadInputDataBit  stm32f4xx_gpio.o
-    0x0800077c   0x0800077c   0x00000010   Code   RO         2608    i.GetDeviceAddress  iic.o
-    0x0800078c   0x0800078c   0x00000004   Code   RO         2455    i.HardFault_Handler  stm32f4xx_it.o
-    0x08000790   0x08000790   0x00000018   Code   RO          162    i.I2C_AcknowledgeConfig  stm32f4xx_i2c.o
-    0x080007a8   0x080007a8   0x0000002a   Code   RO          165    i.I2C_CheckEvent    stm32f4xx_i2c.o
-    0x080007d2   0x080007d2   0x0000000c   Code   RO          166    i.I2C_ClearFlag     stm32f4xx_i2c.o
-    0x080007de   0x080007de   0x00000018   Code   RO          168    i.I2C_Cmd           stm32f4xx_i2c.o
-    0x080007f6   0x080007f6   0x00000002   PAD
-    0x080007f8   0x080007f8   0x00000094   Code   RO         2609    i.I2C_EEPROM_Init   iic.o
-    0x0800088c   0x0800088c   0x00000018   Code   RO          176    i.I2C_GenerateSTART  stm32f4xx_i2c.o
-    0x080008a4   0x080008a4   0x00000018   Code   RO          177    i.I2C_GenerateSTOP  stm32f4xx_i2c.o
-    0x080008bc   0x080008bc   0x000000e8   Code   RO          183    i.I2C_Init          stm32f4xx_i2c.o
-    0x080009a4   0x080009a4   0x00000008   Code   RO          188    i.I2C_ReceiveData   stm32f4xx_i2c.o
-    0x080009ac   0x080009ac   0x00000010   Code   RO          190    i.I2C_Send7bitAddress  stm32f4xx_i2c.o
-    0x080009bc   0x080009bc   0x00000004   Code   RO          191    i.I2C_SendData      stm32f4xx_i2c.o
-    0x080009c0   0x080009c0   0x0000002c   Code   RO         2610    i.I2C_WaitEvent     iic.o
-    0x080009ec   0x080009ec   0x00000038   Code   RO         2559    i.KEY0_Scan         key.o
-    0x08000a24   0x08000a24   0x00000038   Code   RO         2560    i.KEY1_Scan         key.o
-    0x08000a5c   0x08000a5c   0x00000068   Code   RO         2561    i.KEY_Init          key.o
-    0x08000ac4   0x08000ac4   0x0000003c   Code   RO         2562    i.KEY_Scan          key.o
-    0x08000b00   0x08000b00   0x00000090   Code   RO         2611    i.LifeTestStart     iic.o
-    0x08000b90   0x08000b90   0x00000124   Code   RO         2612    i.LifeTestStep      iic.o
-    0x08000cb4   0x08000cb4   0x00000068   Code   RO         2613    i.LifeTestStop      iic.o
-    0x08000d1c   0x08000d1c   0x00000004   Code   RO         2456    i.MemManage_Handler  stm32f4xx_it.o
-    0x08000d20   0x08000d20   0x00000002   Code   RO         2457    i.NMI_Handler       stm32f4xx_it.o
-    0x08000d22   0x08000d22   0x00000002   PAD
-    0x08000d24   0x08000d24   0x000000a4   Code   RO         2614    i.PageTestStart     iic.o
-    0x08000dc8   0x08000dc8   0x00000150   Code   RO         2615    i.PageTestStep      iic.o
-    0x08000f18   0x08000f18   0x00000070   Code   RO         2616    i.PageTestStop      iic.o
-    0x08000f88   0x08000f88   0x00000002   Code   RO         2458    i.PendSV_Handler    stm32f4xx_it.o
-    0x08000f8a   0x08000f8a   0x00000002   PAD
-    0x08000f8c   0x08000f8c   0x00000020   Code   RO          483    i.RCC_AHB1PeriphClockCmd  stm32f4xx_rcc.o
-    0x08000fac   0x08000fac   0x00000020   Code   RO          492    i.RCC_APB1PeriphClockCmd  stm32f4xx_rcc.o
-    0x08000fcc   0x08000fcc   0x00000020   Code   RO          495    i.RCC_APB2PeriphClockCmd  stm32f4xx_rcc.o
-    0x08000fec   0x08000fec   0x00000064   Code   RO          503    i.RCC_DeInit        stm32f4xx_rcc.o
-    0x08001050   0x08001050   0x000000e8   Code   RO          504    i.RCC_GetClocksFreq  stm32f4xx_rcc.o
-    0x08001138   0x08001138   0x00000040   Code   RO          505    i.RCC_GetFlagStatus  stm32f4xx_rcc.o
-    0x08001178   0x08001178   0x00000010   Code   RO          507    i.RCC_GetSYSCLKSource  stm32f4xx_rcc.o
-    0x08001188   0x08001188   0x00000018   Code   RO          508    i.RCC_HCLKConfig    stm32f4xx_rcc.o
-    0x080011a0   0x080011a0   0x00000010   Code   RO          509    i.RCC_HSEConfig     stm32f4xx_rcc.o
-    0x080011b0   0x080011b0   0x00000018   Code   RO          519    i.RCC_PCLK1Config   stm32f4xx_rcc.o
-    0x080011c8   0x080011c8   0x00000018   Code   RO          520    i.RCC_PCLK2Config   stm32f4xx_rcc.o
-    0x080011e0   0x080011e0   0x0000000c   Code   RO          521    i.RCC_PLLCmd        stm32f4xx_rcc.o
-    0x080011ec   0x080011ec   0x00000024   Code   RO          522    i.RCC_PLLConfig     stm32f4xx_rcc.o
-    0x08001210   0x08001210   0x00000018   Code   RO          533    i.RCC_SYSCLKConfig  stm32f4xx_rcc.o
-    0x08001228   0x08001228   0x00000002   Code   RO         2459    i.SVC_Handler       stm32f4xx_it.o
-    0x0800122a   0x0800122a   0x00000002   PAD
-    0x0800122c   0x0800122c   0x000000ec   Code   RO         2371    i.SetSysClock       system_stm32f4xx.o
-    0x08001318   0x08001318   0x00000028   Code   RO           16    i.SysTick_CLKSourceConfig  misc.o
-    0x08001340   0x08001340   0x00000002   Code   RO         2460    i.SysTick_Handler   stm32f4xx_it.o
-    0x08001342   0x08001342   0x0000000c   Code   RO         2526    i.SysTick_Init      delay.o
-    0x0800134e   0x0800134e   0x00000068   Code   RO         2408    i.SystemClock_Config  main.o
-    0x080013b6   0x080013b6   0x00000002   PAD
-    0x080013b8   0x080013b8   0x000000c0   Code   RO         2372    i.SystemCoreClockUpdate  system_stm32f4xx.o
-    0x08001478   0x08001478   0x00000068   Code   RO         2373    i.SystemInit        system_stm32f4xx.o
-    0x080014e0   0x080014e0   0x00000088   Code   RO         2718    i.USART1_Init       uart.o
-    0x08001568   0x08001568   0x00000018   Code   RO          939    i.USART_Cmd         stm32f4xx_usart.o
-    0x08001580   0x08001580   0x0000001a   Code   RO          942    i.USART_GetFlagStatus  stm32f4xx_usart.o
-    0x0800159a   0x0800159a   0x00000002   PAD
-    0x0800159c   0x0800159c   0x000000d4   Code   RO          946    i.USART_Init        stm32f4xx_usart.o
-    0x08001670   0x08001670   0x00000020   Code   RO         2719    i.USART_SendChar    uart.o
-    0x08001690   0x08001690   0x00000008   Code   RO          956    i.USART_SendData    stm32f4xx_usart.o
-    0x08001698   0x08001698   0x0000004c   Code   RO         2720    i.USART_SendDec     uart.o
-    0x080016e4   0x080016e4   0x00000040   Code   RO         2721    i.USART_SendHex     uart.o
-    0x08001724   0x08001724   0x00000018   Code   RO         2722    i.USART_SendString  uart.o
-    0x0800173c   0x0800173c   0x00000004   Code   RO         2461    i.UsageFault_Handler  stm32f4xx_it.o
-    0x08001740   0x08001740   0x0000000e   Code   RO         2782    i.__scatterload_copy  mc_w.l(handlers.o)
-    0x0800174e   0x0800174e   0x00000002   Code   RO         2783    i.__scatterload_null  mc_w.l(handlers.o)
-    0x08001750   0x08001750   0x0000000e   Code   RO         2784    i.__scatterload_zeroinit  mc_w.l(handlers.o)
-    0x0800175e   0x0800175e   0x00000002   PAD
-    0x08001760   0x08001760   0x000000dc   Code   RO         2409    i.main              main.o
-    0x0800183c   0x0800183c   0x00000011   Data   RO         2723    .constdata          uart.o
-    0x0800184d   0x0800184d   0x00000003   PAD
-    0x08001850   0x08001850   0x00000020   Data   RO         2780    Region$$Table       anon$$obj.o
+    0x08000000   0x00000188   Data   RO            3    RESET               startup_stm32f40_41xxx.o
+    0x08000188   0x00000000   Code   RO         2769  * .ARM.Collect$$$$00000000  mc_w.l(entry.o)
+    0x08000188   0x00000004   Code   RO         2772    .ARM.Collect$$$$00000001  mc_w.l(entry2.o)
+    0x0800018c   0x00000004   Code   RO         2775    .ARM.Collect$$$$00000004  mc_w.l(entry5.o)
+    0x08000190   0x00000000   Code   RO         2777    .ARM.Collect$$$$00000008  mc_w.l(entry7b.o)
+    0x08000190   0x00000000   Code   RO         2779    .ARM.Collect$$$$0000000A  mc_w.l(entry8b.o)
+    0x08000190   0x00000008   Code   RO         2780    .ARM.Collect$$$$0000000B  mc_w.l(entry9a.o)
+    0x08000198   0x00000000   Code   RO         2782    .ARM.Collect$$$$0000000D  mc_w.l(entry10a.o)
+    0x08000198   0x00000000   Code   RO         2784    .ARM.Collect$$$$0000000F  mc_w.l(entry11a.o)
+    0x08000198   0x00000004   Code   RO         2773    .ARM.Collect$$$$00002712  mc_w.l(entry2.o)
+    0x0800019c   0x00000024   Code   RO            4    .text               startup_stm32f40_41xxx.o
+    0x080001c0   0x00000024   Code   RO         2786    .text               mc_w.l(init.o)
+    0x080001e4   0x00000004   Code   RO         2456    i.BusFault_Handler  stm32f4xx_it.o
+    0x080001e8   0x00000002   Code   RO         2457    i.DebugMon_Handler  stm32f4xx_it.o
+    0x080001ea   0x00000044   Code   RO         2527    i.Delay_ms          delay.o
+    0x0800022e   0x00000002   PAD
+    0x08000230   0x00000014   Code   RO         2603    i.EEPROM_LifeTestStep  iic.o
+    0x08000244   0x00000014   Code   RO         2604    i.EEPROM_LifeTestToggle  iic.o
+    0x08000258   0x00000014   Code   RO         2605    i.EEPROM_PageTestStep  iic.o
+    0x0800026c   0x00000014   Code   RO         2606    i.EEPROM_PageTestToggle  iic.o
+    0x08000280   0x000000e8   Code   RO         2607    i.EEPROM_ReadByte   iic.o
+    0x08000368   0x000001c0   Code   RO         2608    i.EEPROM_RunSingleAddressDemo  iic.o
+    0x08000528   0x000000a4   Code   RO         2610    i.EEPROM_WriteByte  iic.o
+    0x080005cc   0x00000090   Code   RO          386    i.GPIO_Init         stm32f4xx_gpio.o
+    0x0800065c   0x00000046   Code   RO          387    i.GPIO_PinAFConfig  stm32f4xx_gpio.o
+    0x080006a2   0x00000012   Code   RO          390    i.GPIO_ReadInputDataBit  stm32f4xx_gpio.o
+    0x080006b4   0x00000006   Code   RO         2611    i.GetDeviceAddress  iic.o
+    0x080006ba   0x00000004   Code   RO         2458    i.HardFault_Handler  stm32f4xx_it.o
+    0x080006be   0x00000018   Code   RO          162    i.I2C_AcknowledgeConfig  stm32f4xx_i2c.o
+    0x080006d6   0x0000002a   Code   RO          165    i.I2C_CheckEvent    stm32f4xx_i2c.o
+    0x08000700   0x00000018   Code   RO          168    i.I2C_Cmd           stm32f4xx_i2c.o
+    0x08000718   0x00000094   Code   RO         2612    i.I2C_EEPROM_Init   iic.o
+    0x080007ac   0x00000018   Code   RO          176    i.I2C_GenerateSTART  stm32f4xx_i2c.o
+    0x080007c4   0x00000018   Code   RO          177    i.I2C_GenerateSTOP  stm32f4xx_i2c.o
+    0x080007dc   0x000000e8   Code   RO          183    i.I2C_Init          stm32f4xx_i2c.o
+    0x080008c4   0x00000008   Code   RO          188    i.I2C_ReceiveData   stm32f4xx_i2c.o
+    0x080008cc   0x00000010   Code   RO          190    i.I2C_Send7bitAddress  stm32f4xx_i2c.o
+    0x080008dc   0x00000004   Code   RO          191    i.I2C_SendData      stm32f4xx_i2c.o
+    0x080008e0   0x0000002c   Code   RO         2613    i.I2C_WaitEvent     iic.o
+    0x0800090c   0x00000038   Code   RO         2562    i.KEY0_Scan         key.o
+    0x08000944   0x00000038   Code   RO         2563    i.KEY1_Scan         key.o
+    0x0800097c   0x00000068   Code   RO         2564    i.KEY_Init          key.o
+    0x080009e4   0x0000003c   Code   RO         2565    i.KEY_Scan          key.o
+    0x08000a20   0x00000088   Code   RO         2614    i.LifeTestReportMismatch  iic.o
+    0x08000aa8   0x0000009c   Code   RO         2615    i.LifeTestStart     iic.o
+    0x08000b44   0x00000250   Code   RO         2616    i.LifeTestStep      iic.o
+    0x08000d94   0x00000070   Code   RO         2617    i.LifeTestStop      iic.o
+    0x08000e04   0x00000004   Code   RO         2459    i.MemManage_Handler  stm32f4xx_it.o
+    0x08000e08   0x00000002   Code   RO         2460    i.NMI_Handler       stm32f4xx_it.o
+    0x08000e0a   0x00000002   PAD
+    0x08000e0c   0x000000a4   Code   RO         2618    i.PageTestStart     iic.o
+    0x08000eb0   0x00000150   Code   RO         2619    i.PageTestStep      iic.o
+    0x08001000   0x00000070   Code   RO         2620    i.PageTestStop      iic.o
+    0x08001070   0x00000002   Code   RO         2461    i.PendSV_Handler    stm32f4xx_it.o
+    0x08001072   0x00000002   PAD
+    0x08001074   0x00000020   Code   RO          483    i.RCC_AHB1PeriphClockCmd  stm32f4xx_rcc.o
+    0x08001094   0x00000020   Code   RO          492    i.RCC_APB1PeriphClockCmd  stm32f4xx_rcc.o
+    0x080010b4   0x00000020   Code   RO          495    i.RCC_APB2PeriphClockCmd  stm32f4xx_rcc.o
+    0x080010d4   0x00000064   Code   RO          503    i.RCC_DeInit        stm32f4xx_rcc.o
+    0x08001138   0x000000e8   Code   RO          504    i.RCC_GetClocksFreq  stm32f4xx_rcc.o
+    0x08001220   0x00000040   Code   RO          505    i.RCC_GetFlagStatus  stm32f4xx_rcc.o
+    0x08001260   0x00000010   Code   RO          507    i.RCC_GetSYSCLKSource  stm32f4xx_rcc.o
+    0x08001270   0x00000018   Code   RO          508    i.RCC_HCLKConfig    stm32f4xx_rcc.o
+    0x08001288   0x00000010   Code   RO          509    i.RCC_HSEConfig     stm32f4xx_rcc.o
+    0x08001298   0x00000018   Code   RO          519    i.RCC_PCLK1Config   stm32f4xx_rcc.o
+    0x080012b0   0x00000018   Code   RO          520    i.RCC_PCLK2Config   stm32f4xx_rcc.o
+    0x080012c8   0x0000000c   Code   RO          521    i.RCC_PLLCmd        stm32f4xx_rcc.o
+    0x080012d4   0x00000024   Code   RO          522    i.RCC_PLLConfig     stm32f4xx_rcc.o
+    0x080012f8   0x00000018   Code   RO          533    i.RCC_SYSCLKConfig  stm32f4xx_rcc.o
+    0x08001310   0x00000002   Code   RO         2462    i.SVC_Handler       stm32f4xx_it.o
+    0x08001312   0x00000002   PAD
+    0x08001314   0x000000ec   Code   RO         2371    i.SetSysClock       system_stm32f4xx.o
+    0x08001400   0x00000028   Code   RO           16    i.SysTick_CLKSourceConfig  misc.o
+    0x08001428   0x00000002   Code   RO         2463    i.SysTick_Handler   stm32f4xx_it.o
+    0x0800142a   0x0000000c   Code   RO         2529    i.SysTick_Init      delay.o
+    0x08001436   0x00000068   Code   RO         2408    i.SystemClock_Config  main.o
+    0x0800149e   0x00000002   PAD
+    0x080014a0   0x000000c0   Code   RO         2372    i.SystemCoreClockUpdate  system_stm32f4xx.o
+    0x08001560   0x00000068   Code   RO         2373    i.SystemInit        system_stm32f4xx.o
+    0x080015c8   0x00000088   Code   RO         2726    i.USART1_Init       uart.o
+    0x08001650   0x00000018   Code   RO          939    i.USART_Cmd         stm32f4xx_usart.o
+    0x08001668   0x0000001a   Code   RO          942    i.USART_GetFlagStatus  stm32f4xx_usart.o
+    0x08001682   0x00000002   PAD
+    0x08001684   0x000000d4   Code   RO          946    i.USART_Init        stm32f4xx_usart.o
+    0x08001758   0x00000020   Code   RO         2727    i.USART_SendChar    uart.o
+    0x08001778   0x00000008   Code   RO          956    i.USART_SendData    stm32f4xx_usart.o
+    0x08001780   0x0000004c   Code   RO         2728    i.USART_SendDec     uart.o
+    0x080017cc   0x00000040   Code   RO         2729    i.USART_SendHex     uart.o
+    0x0800180c   0x00000018   Code   RO         2730    i.USART_SendString  uart.o
+    0x08001824   0x00000004   Code   RO         2464    i.UsageFault_Handler  stm32f4xx_it.o
+    0x08001828   0x0000000e   Code   RO         2790    i.__scatterload_copy  mc_w.l(handlers.o)
+    0x08001836   0x00000002   Code   RO         2791    i.__scatterload_null  mc_w.l(handlers.o)
+    0x08001838   0x0000000e   Code   RO         2792    i.__scatterload_zeroinit  mc_w.l(handlers.o)
+    0x08001846   0x00000002   PAD
+    0x08001848   0x000000f4   Code   RO         2409    i.main              main.o
+    0x0800193c   0x00000011   Data   RO         2731    .constdata          uart.o
+    0x0800194d   0x00000003   PAD
+    0x08001950   0x00000020   Data   RO         2788    Region$$Table       anon$$obj.o
 
 
-    Execution Region RW_IRAM1 (Exec base: 0x20000000, Load base: 0x08001870, Size: 0x00002038, Max: 0x00020000, ABSOLUTE)
+    Execution Region RW_IRAM1 (Base: 0x20000000, Size: 0x00002038, Max: 0x00020000, ABSOLUTE)
 
-    Exec Addr    Load Addr    Size         Type   Attr      Idx    E Section Name        Object
+    Base Addr    Size         Type   Attr      Idx    E Section Name        Object
 
-    0x20000000   0x08001870   0x00000010   Data   RW          536    .data               stm32f4xx_rcc.o
-    0x20000010   0x08001880   0x00000014   Data   RW         2374    .data               system_stm32f4xx.o
-    0x20000024   0x08001894   0x00000012   Data   RW         2617    .data               iic.o
-    0x20000036   0x080018a6   0x00000002   PAD
-    0x20000038        -       0x00002000   Zero   RW            1    STACK               startup_stm32f40_41xxx.o
+    0x20000000   0x00000010   Data   RW          536    .data               stm32f4xx_rcc.o
+    0x20000010   0x00000014   Data   RW         2374    .data               system_stm32f4xx.o
+    0x20000024   0x00000012   Data   RW         2621    .data               iic.o
+    0x20000036   0x00000002   PAD
+    0x20000038   0x00002000   Zero   RW            1    STACK               startup_stm32f40_41xxx.o
 
 
 ==============================================================================
@@ -1069,22 +1065,22 @@ Image component sizes
 
       Code (inc. data)   RO Data    RW Data    ZI Data      Debug   Object Name
 
-       150          0          0          0          0       1445   delay.o
-      2416        814          0         18          0      11205   iic.o
-       276         26          0          0          0       2102   key.o
-       324        128          0          0          0       1052   main.o
-        40          0          0          0          0     268814   misc.o
-        36          8        392          0       8192        864   startup_stm32f40_41xxx.o
-       232          0          0          0          0       2439   stm32f4xx_gpio.o
-       410         14          0          0          0       6620   stm32f4xx_i2c.o
-        26          0          0          0          0       4034   stm32f4xx_it.o
-       668        102          0         16          0      10427   stm32f4xx_rcc.o
-       270          8          0          0          0       3300   stm32f4xx_usart.o
-       532         54          0         20          0       2501   system_stm32f4xx.o
-       332         22         17          0          0       2994   uart.o
+        80          0          0          0          0        966   delay.o
+      2730       1046          0         18          0      11209   iic.o
+       276         26          0          0          0       2122   key.o
+       348        140          0          0          0       1068   main.o
+        40          0          0          0          0     268850   misc.o
+        36          8        392          0       8192        872   startup_stm32f40_41xxx.o
+       232          0          0          0          0       2459   stm32f4xx_gpio.o
+       398         14          0          0          0       6092   stm32f4xx_i2c.o
+        26          0          0          0          0       4094   stm32f4xx_it.o
+       668        102          0         16          0      10515   stm32f4xx_rcc.o
+       270          8          0          0          0       3332   stm32f4xx_usart.o
+       532         54          0         20          0       2525   system_stm32f4xx.o
+       332         22         17          0          0       3030   uart.o
 
     ----------------------------------------------------------------------
-      5724       1176        444         56       8192     317797   Object Totals
+      5980       1420        444         56       8192     317134   Object Totals
          0          0         32          0          0          0   (incl. Generated)
         12          0          3          2          0          0   (incl. Padding)
 
@@ -1123,15 +1119,15 @@ Image component sizes
 
       Code (inc. data)   RO Data    RW Data    ZI Data      Debug   
 
-      5812       1192        444         56       8192     311169   Grand Totals
-      5812       1192        444         56       8192     311169   ELF Image Totals
-      5812       1192        444         56          0          0   ROM Totals
+      6068       1436        444         56       8192     310706   Grand Totals
+      6068       1436        444         56       8192     310706   ELF Image Totals
+      6068       1436        444         56          0          0   ROM Totals
 
 ==============================================================================
 
-    Total RO  Size (Code + RO Data)                 6256 (   6.11kB)
+    Total RO  Size (Code + RO Data)                 6512 (   6.36kB)
     Total RW  Size (RW Data + ZI Data)              8248 (   8.05kB)
-    Total ROM Size (Code + RO Data + RW Data)       6312 (   6.16kB)
+    Total ROM Size (Code + RO Data + RW Data)       6568 (   6.41kB)
 
 ==============================================================================
 

@@ -2,7 +2,7 @@
 ..\obj\uart.o: APP\uart.h
 ..\obj\uart.o: ..\SYSTEM\stm32f4xx.h
 ..\obj\uart.o: ..\CMSIS\core_cm4.h
-..\obj\uart.o: D:\Keil_v5\ARM\ARMCC\Bin\..\include\stdint.h
+..\obj\uart.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdint.h
 ..\obj\uart.o: ..\CMSIS\core_cmInstr.h
 ..\obj\uart.o: ..\CMSIS\core_cmFunc.h
 ..\obj\uart.o: ..\CMSIS\core_cm4_simd.h

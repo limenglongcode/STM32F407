@@ -1,6 +1,6 @@
 ..\obj\iic.o: APP\iic.c
-..\obj\iic.o: D:\Keil_v5\ARM\ARMCC\Bin\..\include\stdint.h
-..\obj\iic.o: D:\Keil_v5\ARM\ARMCC\Bin\..\include\stddef.h
+..\obj\iic.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stddef.h
+..\obj\iic.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdint.h
 ..\obj\iic.o: ..\SYSTEM\stm32f4xx.h
 ..\obj\iic.o: ..\CMSIS\core_cm4.h
 ..\obj\iic.o: ..\CMSIS\core_cmInstr.h
@@ -35,6 +35,6 @@
 ..\obj\iic.o: ..\DEVICE_LIB\inc\stm32f4xx_dac.h
 ..\obj\iic.o: ..\DEVICE_LIB\inc\stm32f4xx_dcmi.h
 ..\obj\iic.o: ..\DEVICE_LIB\inc\stm32f4xx_fsmc.h
-..\obj\iic.o: APP\delay.h
 ..\obj\iic.o: APP\config.h
+..\obj\iic.o: APP\delay.h
 ..\obj\iic.o: APP\uart.h

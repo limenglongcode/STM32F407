@@ -2,7 +2,7 @@
 ..\obj\stm32f4xx_pwr.o: ..\DEVICE_LIB\inc\stm32f4xx_pwr.h
 ..\obj\stm32f4xx_pwr.o: ..\SYSTEM\stm32f4xx.h
 ..\obj\stm32f4xx_pwr.o: ..\CMSIS\core_cm4.h
-..\obj\stm32f4xx_pwr.o: D:\Keil_v5\ARM\ARMCC\Bin\..\include\stdint.h
+..\obj\stm32f4xx_pwr.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdint.h
 ..\obj\stm32f4xx_pwr.o: ..\CMSIS\core_cmInstr.h
 ..\obj\stm32f4xx_pwr.o: ..\CMSIS\core_cmFunc.h
 ..\obj\stm32f4xx_pwr.o: ..\CMSIS\core_cm4_simd.h

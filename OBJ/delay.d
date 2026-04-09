@@ -2,7 +2,7 @@
 ..\obj\delay.o: APP\delay.h
 ..\obj\delay.o: ..\SYSTEM\stm32f4xx.h
 ..\obj\delay.o: ..\CMSIS\core_cm4.h
-..\obj\delay.o: D:\Keil_v5\ARM\ARMCC\Bin\..\include\stdint.h
+..\obj\delay.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdint.h
 ..\obj\delay.o: ..\CMSIS\core_cmInstr.h
 ..\obj\delay.o: ..\CMSIS\core_cmFunc.h
 ..\obj\delay.o: ..\CMSIS\core_cm4_simd.h
