@@ -1,16 +1,12 @@
 /*
  * main.c
  *
- *  Created on: 2025年11月20日
- *  Author: 
- *  功能 ：主函数
+ * 主函数
  */
-/*C 库   */
-#include "stm32f4xx.h"  
+#include "stm32f4xx.h"
 #include <stdio.h>
 #include <string.h>
 
-// 业务代码
 #include "delay.h"
 #include "key.h"
 #include "iic.h"
@@ -35,33 +31,34 @@ void SystemClock_Config(void)
 
 int main(void)
 {
-    SystemClock_Config();   //系统时钟初始化
-    SysTick_Init();         //系统定时器初始化
-    KEY_Init();             //按键初始化
-    USART1_Init();          //串口初始化
-    I2C_EEPROM_Init();      //I2C初始化
+    SystemClock_Config();
+    SysTick_Init();
+    KEY_Init();
+    USART1_Init();
+    I2C_EEPROM_Init();
 
     USART_SendString("\r\n==== ");
     USART_SendString(CHIP_NAME);
     USART_SendString(" test ====\r\n");
     USART_SendString("WK_UP: single address R/W demo\r\n");
+#ifdef USE_FM24NM01AI3
     USART_SendString("KEY0: byte life test start\r\n");
+#else
+    USART_SendString("KEY0: 4-byte life test start\r\n");
+#endif
     USART_SendString("KEY1: page life test start\r\n");
 
     while (1)
     {
-        if (KEY_Scan())//复位按键
-        {
+        if (KEY_Scan()) {
             EEPROM_RunSingleAddressDemo();
         }
 
-        if (KEY0_Scan())//4字节寿命测试
-        {
+        if (KEY0_Scan()) {
             EEPROM_LifeTestToggle();
         }
 
-        if (KEY1_Scan())//页写寿命测试
-        {
+        if (KEY1_Scan()) {
             EEPROM_PageTestToggle();
         }
 

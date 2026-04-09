@@ -35,6 +35,6 @@
 ..\obj\iic.o: ..\DEVICE_LIB\inc\stm32f4xx_dac.h
 ..\obj\iic.o: ..\DEVICE_LIB\inc\stm32f4xx_dcmi.h
 ..\obj\iic.o: ..\DEVICE_LIB\inc\stm32f4xx_fsmc.h
-..\obj\iic.o: APP\config.h
 ..\obj\iic.o: APP\delay.h
+..\obj\iic.o: APP\config.h
 ..\obj\iic.o: APP\uart.h

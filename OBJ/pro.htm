@@ -3,11 +3,11 @@
 <title>Static Call Graph - [..\OBJ\pro.axf]</title></head>
 <body><HR>
 <H1>Static Call Graph for image ..\OBJ\pro.axf</H1><HR>
-<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060422: Last Updated: Thu Apr 09 15:06:02 2026
+<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060422: Last Updated: Thu Apr 09 15:32:30 2026
 <BR><P>
-<H3>Maximum Stack Usage =        100 bytes + Unknown(Cycles, Untraceable Function Pointers)</H3><H3>
+<H3>Maximum Stack Usage =        120 bytes + Unknown(Cycles, Untraceable Function Pointers)</H3><H3>
 Call chain for Maximum Stack Depth:</H3>
-main &rArr; USART1_Init &rArr; USART_Init &rArr; RCC_GetClocksFreq
+main &rArr; EEPROM_LifeTestStep &rArr; LifeTestStep &rArr; EEPROM_WriteByte &rArr; EEPROM_WritePage &rArr; EEPROM_WaitReady &rArr; I2C_WaitEvent &rArr; I2C_CheckEvent
 <P>
 <H3>
 Mutually Recursive functions
@@ -120,7 +120,7 @@ Global Symbols
 <P><STRONG><a name="[5e]"></a>__main</STRONG> (Thumb, 0 bytes, Stack size unknown bytes, entry.o(.ARM.Collect$$$$00000000))
 <BR>[Address Reference Count : 1]<UL><LI> startup_stm32f40_41xxx.o(.text)
 </UL>
-<P><STRONG><a name="[a0]"></a>_main_stk</STRONG> (Thumb, 0 bytes, Stack size unknown bytes, entry2.o(.ARM.Collect$$$$00000001))
+<P><STRONG><a name="[a5]"></a>_main_stk</STRONG> (Thumb, 0 bytes, Stack size unknown bytes, entry2.o(.ARM.Collect$$$$00000001))
 
 <P><STRONG><a name="[5f]"></a>_main_scatterload</STRONG> (Thumb, 0 bytes, Stack size unknown bytes, entry5.o(.ARM.Collect$$$$00000004))
 <BR><BR>[Calls]<UL><LI><a href="#[60]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__scatterload
@@ -130,15 +130,15 @@ Global Symbols
 <BR><BR>[Called By]<UL><LI><a href="#[60]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__scatterload
 </UL>
 
-<P><STRONG><a name="[a1]"></a>_main_clock</STRONG> (Thumb, 0 bytes, Stack size unknown bytes, entry7b.o(.ARM.Collect$$$$00000008))
+<P><STRONG><a name="[a6]"></a>_main_clock</STRONG> (Thumb, 0 bytes, Stack size unknown bytes, entry7b.o(.ARM.Collect$$$$00000008))
 
-<P><STRONG><a name="[a2]"></a>_main_cpp_init</STRONG> (Thumb, 0 bytes, Stack size unknown bytes, entry8b.o(.ARM.Collect$$$$0000000A))
+<P><STRONG><a name="[a7]"></a>_main_cpp_init</STRONG> (Thumb, 0 bytes, Stack size unknown bytes, entry8b.o(.ARM.Collect$$$$0000000A))
 
-<P><STRONG><a name="[a3]"></a>_main_init</STRONG> (Thumb, 0 bytes, Stack size unknown bytes, entry9a.o(.ARM.Collect$$$$0000000B))
+<P><STRONG><a name="[a8]"></a>_main_init</STRONG> (Thumb, 0 bytes, Stack size unknown bytes, entry9a.o(.ARM.Collect$$$$0000000B))
 
-<P><STRONG><a name="[a4]"></a>__rt_final_cpp</STRONG> (Thumb, 0 bytes, Stack size unknown bytes, entry10a.o(.ARM.Collect$$$$0000000D))
+<P><STRONG><a name="[a9]"></a>__rt_final_cpp</STRONG> (Thumb, 0 bytes, Stack size unknown bytes, entry10a.o(.ARM.Collect$$$$0000000D))
 
-<P><STRONG><a name="[a5]"></a>__rt_final_exit</STRONG> (Thumb, 0 bytes, Stack size unknown bytes, entry11a.o(.ARM.Collect$$$$0000000F))
+<P><STRONG><a name="[aa]"></a>__rt_final_exit</STRONG> (Thumb, 0 bytes, Stack size unknown bytes, entry11a.o(.ARM.Collect$$$$0000000F))
 
 <P><STRONG><a name="[0]"></a>Reset_Handler</STRONG> (Thumb, 8 bytes, Stack size 0 bytes, startup_stm32f40_41xxx.o(.text))
 <BR>[Address Reference Count : 1]<UL><LI> startup_stm32f40_41xxx.o(RESET)
@@ -399,7 +399,7 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[5f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;_main_scatterload
 </UL>
 
-<P><STRONG><a name="[a6]"></a>__scatterload_rt2</STRONG> (Thumb, 0 bytes, Stack size 0 bytes, init.o(.text), UNUSED)
+<P><STRONG><a name="[ab]"></a>__scatterload_rt2</STRONG> (Thumb, 0 bytes, Stack size 0 bytes, init.o(.text), UNUSED)
 
 <P><STRONG><a name="[4]"></a>BusFault_Handler</STRONG> (Thumb, 4 bytes, Stack size 0 bytes, stm32f4xx_it.o(i.BusFault_Handler))
 <BR>[Address Reference Count : 1]<UL><LI> startup_stm32f40_41xxx.o(RESET)
@@ -407,15 +407,20 @@ Global Symbols
 <P><STRONG><a name="[7]"></a>DebugMon_Handler</STRONG> (Thumb, 2 bytes, Stack size 0 bytes, stm32f4xx_it.o(i.DebugMon_Handler))
 <BR>[Address Reference Count : 1]<UL><LI> startup_stm32f40_41xxx.o(RESET)
 </UL>
-<P><STRONG><a name="[82]"></a>Delay_ms</STRONG> (Thumb, 68 bytes, Stack size 0 bytes, delay.o(i.Delay_ms))
-<BR><BR>[Called By]<UL><LI><a href="#[85]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;KEY_Scan
-<LI><a href="#[83]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;KEY1_Scan
-<LI><a href="#[80]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;KEY0_Scan
+<P><STRONG><a name="[7b]"></a>Delay_ms</STRONG> (Thumb, 68 bytes, Stack size 0 bytes, delay.o(i.Delay_ms))
+<BR><BR>[Called By]<UL><LI><a href="#[7a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;EEPROM_WritePage
+<LI><a href="#[89]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;KEY_Scan
+<LI><a href="#[87]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;KEY1_Scan
+<LI><a href="#[85]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;KEY0_Scan
 <LI><a href="#[5c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
 </UL>
 
+<P><STRONG><a name="[79]"></a>Delay_us</STRONG> (Thumb, 70 bytes, Stack size 0 bytes, delay.o(i.Delay_us))
+<BR><BR>[Called By]<UL><LI><a href="#[77]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;EEPROM_WaitReady
+</UL>
+
 <P><STRONG><a name="[62]"></a>EEPROM_LifeTestStep</STRONG> (Thumb, 14 bytes, Stack size 8 bytes, iic.o(i.EEPROM_LifeTestStep))
-<BR><BR>[Stack]<UL><LI>Max Depth = 88<LI>Call Chain = EEPROM_LifeTestStep &rArr; LifeTestStep &rArr; LifeTestReportMismatch &rArr; USART_SendHex &rArr; USART_SendString &rArr; USART_SendChar
+<BR><BR>[Stack]<UL><LI>Max Depth = 120<LI>Call Chain = EEPROM_LifeTestStep &rArr; LifeTestStep &rArr; EEPROM_WriteByte &rArr; EEPROM_WritePage &rArr; EEPROM_WaitReady &rArr; I2C_WaitEvent &rArr; I2C_CheckEvent
 </UL>
 <BR>[Calls]<UL><LI><a href="#[63]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;LifeTestStep
 </UL>
@@ -431,7 +436,7 @@ Global Symbols
 </UL>
 
 <P><STRONG><a name="[66]"></a>EEPROM_PageTestStep</STRONG> (Thumb, 14 bytes, Stack size 8 bytes, iic.o(i.EEPROM_PageTestStep))
-<BR><BR>[Stack]<UL><LI>Max Depth = 88<LI>Call Chain = EEPROM_PageTestStep &rArr; PageTestStep &rArr; EEPROM_WriteByte &rArr; I2C_WaitEvent &rArr; I2C_CheckEvent
+<BR><BR>[Stack]<UL><LI>Max Depth = 112<LI>Call Chain = EEPROM_PageTestStep &rArr; PageTestStep &rArr; EEPROM_WritePage &rArr; EEPROM_WaitReady &rArr; I2C_WaitEvent &rArr; I2C_CheckEvent
 </UL>
 <BR>[Calls]<UL><LI><a href="#[67]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;PageTestStep
 </UL>
@@ -464,7 +469,7 @@ Global Symbols
 </UL>
 
 <P><STRONG><a name="[73]"></a>EEPROM_RunSingleAddressDemo</STRONG> (Thumb, 194 bytes, Stack size 16 bytes, iic.o(i.EEPROM_RunSingleAddressDemo))
-<BR><BR>[Stack]<UL><LI>Max Depth = 72<LI>Call Chain = EEPROM_RunSingleAddressDemo &rArr; EEPROM_WriteByte &rArr; I2C_WaitEvent &rArr; I2C_CheckEvent
+<BR><BR>[Stack]<UL><LI>Max Depth = 112<LI>Call Chain = EEPROM_RunSingleAddressDemo &rArr; EEPROM_WriteByte &rArr; EEPROM_WritePage &rArr; EEPROM_WaitReady &rArr; I2C_WaitEvent &rArr; I2C_CheckEvent
 </UL>
 <BR>[Calls]<UL><LI><a href="#[75]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;USART_SendHex
 <LI><a href="#[76]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;EEPROM_WriteByte
@@ -474,40 +479,34 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[5c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
 </UL>
 
-<P><STRONG><a name="[76]"></a>EEPROM_WriteByte</STRONG> (Thumb, 150 bytes, Stack size 24 bytes, iic.o(i.EEPROM_WriteByte))
-<BR><BR>[Stack]<UL><LI>Max Depth = 56<LI>Call Chain = EEPROM_WriteByte &rArr; I2C_WaitEvent &rArr; I2C_CheckEvent
+<P><STRONG><a name="[76]"></a>EEPROM_WriteByte</STRONG> (Thumb, 26 bytes, Stack size 16 bytes, iic.o(i.EEPROM_WriteByte))
+<BR><BR>[Stack]<UL><LI>Max Depth = 96<LI>Call Chain = EEPROM_WriteByte &rArr; EEPROM_WritePage &rArr; EEPROM_WaitReady &rArr; I2C_WaitEvent &rArr; I2C_CheckEvent
 </UL>
-<BR>[Calls]<UL><LI><a href="#[6f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;I2C_SendData
-<LI><a href="#[6e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;I2C_Send7bitAddress
-<LI><a href="#[72]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;I2C_GenerateSTOP
-<LI><a href="#[6c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;I2C_GenerateSTART
-<LI><a href="#[6d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;I2C_WaitEvent
-<LI><a href="#[6b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;GetDeviceAddress
+<BR>[Calls]<UL><LI><a href="#[7a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;EEPROM_WritePage
 </UL>
-<BR>[Called By]<UL><LI><a href="#[67]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;PageTestStep
-<LI><a href="#[63]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;LifeTestStep
+<BR>[Called By]<UL><LI><a href="#[63]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;LifeTestStep
 <LI><a href="#[73]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;EEPROM_RunSingleAddressDemo
 </UL>
 
-<P><STRONG><a name="[7a]"></a>GPIO_Init</STRONG> (Thumb, 144 bytes, Stack size 20 bytes, stm32f4xx_gpio.o(i.GPIO_Init))
+<P><STRONG><a name="[7f]"></a>GPIO_Init</STRONG> (Thumb, 144 bytes, Stack size 20 bytes, stm32f4xx_gpio.o(i.GPIO_Init))
 <BR><BR>[Stack]<UL><LI>Max Depth = 20<LI>Call Chain = GPIO_Init
 </UL>
-<BR>[Called By]<UL><LI><a href="#[99]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;USART1_Init
-<LI><a href="#[84]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;KEY_Init
-<LI><a href="#[77]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;I2C_EEPROM_Init
+<BR>[Called By]<UL><LI><a href="#[9e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;USART1_Init
+<LI><a href="#[88]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;KEY_Init
+<LI><a href="#[7c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;I2C_EEPROM_Init
 </UL>
 
-<P><STRONG><a name="[7b]"></a>GPIO_PinAFConfig</STRONG> (Thumb, 70 bytes, Stack size 20 bytes, stm32f4xx_gpio.o(i.GPIO_PinAFConfig))
+<P><STRONG><a name="[80]"></a>GPIO_PinAFConfig</STRONG> (Thumb, 70 bytes, Stack size 20 bytes, stm32f4xx_gpio.o(i.GPIO_PinAFConfig))
 <BR><BR>[Stack]<UL><LI>Max Depth = 20<LI>Call Chain = GPIO_PinAFConfig
 </UL>
-<BR>[Called By]<UL><LI><a href="#[99]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;USART1_Init
-<LI><a href="#[77]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;I2C_EEPROM_Init
+<BR>[Called By]<UL><LI><a href="#[9e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;USART1_Init
+<LI><a href="#[7c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;I2C_EEPROM_Init
 </UL>
 
-<P><STRONG><a name="[81]"></a>GPIO_ReadInputDataBit</STRONG> (Thumb, 18 bytes, Stack size 0 bytes, stm32f4xx_gpio.o(i.GPIO_ReadInputDataBit))
-<BR><BR>[Called By]<UL><LI><a href="#[85]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;KEY_Scan
-<LI><a href="#[83]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;KEY1_Scan
-<LI><a href="#[80]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;KEY0_Scan
+<P><STRONG><a name="[86]"></a>GPIO_ReadInputDataBit</STRONG> (Thumb, 18 bytes, Stack size 0 bytes, stm32f4xx_gpio.o(i.GPIO_ReadInputDataBit))
+<BR><BR>[Called By]<UL><LI><a href="#[89]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;KEY_Scan
+<LI><a href="#[87]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;KEY1_Scan
+<LI><a href="#[85]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;KEY0_Scan
 </UL>
 
 <P><STRONG><a name="[2]"></a>HardFault_Handler</STRONG> (Thumb, 4 bytes, Stack size 0 bytes, stm32f4xx_it.o(i.HardFault_Handler))
@@ -517,45 +516,51 @@ Global Symbols
 <BR><BR>[Called By]<UL><LI><a href="#[6a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;EEPROM_ReadByte
 </UL>
 
-<P><STRONG><a name="[7f]"></a>I2C_CheckEvent</STRONG> (Thumb, 42 bytes, Stack size 16 bytes, stm32f4xx_i2c.o(i.I2C_CheckEvent))
+<P><STRONG><a name="[84]"></a>I2C_CheckEvent</STRONG> (Thumb, 42 bytes, Stack size 16 bytes, stm32f4xx_i2c.o(i.I2C_CheckEvent))
 <BR><BR>[Stack]<UL><LI>Max Depth = 16<LI>Call Chain = I2C_CheckEvent
 </UL>
 <BR>[Called By]<UL><LI><a href="#[6d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;I2C_WaitEvent
 </UL>
 
-<P><STRONG><a name="[7d]"></a>I2C_Cmd</STRONG> (Thumb, 24 bytes, Stack size 0 bytes, stm32f4xx_i2c.o(i.I2C_Cmd))
-<BR><BR>[Called By]<UL><LI><a href="#[77]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;I2C_EEPROM_Init
+<P><STRONG><a name="[78]"></a>I2C_ClearFlag</STRONG> (Thumb, 12 bytes, Stack size 0 bytes, stm32f4xx_i2c.o(i.I2C_ClearFlag))
+<BR><BR>[Called By]<UL><LI><a href="#[77]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;EEPROM_WaitReady
 </UL>
 
-<P><STRONG><a name="[77]"></a>I2C_EEPROM_Init</STRONG> (Thumb, 136 bytes, Stack size 32 bytes, iic.o(i.I2C_EEPROM_Init))
+<P><STRONG><a name="[82]"></a>I2C_Cmd</STRONG> (Thumb, 24 bytes, Stack size 0 bytes, stm32f4xx_i2c.o(i.I2C_Cmd))
+<BR><BR>[Called By]<UL><LI><a href="#[7c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;I2C_EEPROM_Init
+</UL>
+
+<P><STRONG><a name="[7c]"></a>I2C_EEPROM_Init</STRONG> (Thumb, 136 bytes, Stack size 32 bytes, iic.o(i.I2C_EEPROM_Init))
 <BR><BR>[Stack]<UL><LI>Max Depth = 100<LI>Call Chain = I2C_EEPROM_Init &rArr; I2C_Init &rArr; RCC_GetClocksFreq
 </UL>
-<BR>[Calls]<UL><LI><a href="#[7b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;GPIO_PinAFConfig
-<LI><a href="#[7a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;GPIO_Init
-<LI><a href="#[7c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;I2C_Init
-<LI><a href="#[7d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;I2C_Cmd
-<LI><a href="#[78]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RCC_APB1PeriphClockCmd
-<LI><a href="#[79]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RCC_AHB1PeriphClockCmd
+<BR>[Calls]<UL><LI><a href="#[80]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;GPIO_PinAFConfig
+<LI><a href="#[7f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;GPIO_Init
+<LI><a href="#[81]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;I2C_Init
+<LI><a href="#[82]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;I2C_Cmd
+<LI><a href="#[7d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RCC_APB1PeriphClockCmd
+<LI><a href="#[7e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RCC_AHB1PeriphClockCmd
 </UL>
 <BR>[Called By]<UL><LI><a href="#[5c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
 </UL>
 
 <P><STRONG><a name="[6c]"></a>I2C_GenerateSTART</STRONG> (Thumb, 24 bytes, Stack size 0 bytes, stm32f4xx_i2c.o(i.I2C_GenerateSTART))
-<BR><BR>[Called By]<UL><LI><a href="#[76]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;EEPROM_WriteByte
-<LI><a href="#[6a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;EEPROM_ReadByte
+<BR><BR>[Called By]<UL><LI><a href="#[6a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;EEPROM_ReadByte
+<LI><a href="#[7a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;EEPROM_WritePage
+<LI><a href="#[77]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;EEPROM_WaitReady
 </UL>
 
 <P><STRONG><a name="[72]"></a>I2C_GenerateSTOP</STRONG> (Thumb, 24 bytes, Stack size 0 bytes, stm32f4xx_i2c.o(i.I2C_GenerateSTOP))
-<BR><BR>[Called By]<UL><LI><a href="#[76]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;EEPROM_WriteByte
-<LI><a href="#[6a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;EEPROM_ReadByte
+<BR><BR>[Called By]<UL><LI><a href="#[6a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;EEPROM_ReadByte
+<LI><a href="#[7a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;EEPROM_WritePage
+<LI><a href="#[77]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;EEPROM_WaitReady
 </UL>
 
-<P><STRONG><a name="[7c]"></a>I2C_Init</STRONG> (Thumb, 218 bytes, Stack size 48 bytes, stm32f4xx_i2c.o(i.I2C_Init))
+<P><STRONG><a name="[81]"></a>I2C_Init</STRONG> (Thumb, 218 bytes, Stack size 48 bytes, stm32f4xx_i2c.o(i.I2C_Init))
 <BR><BR>[Stack]<UL><LI>Max Depth = 68<LI>Call Chain = I2C_Init &rArr; RCC_GetClocksFreq
 </UL>
-<BR>[Calls]<UL><LI><a href="#[7e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RCC_GetClocksFreq
+<BR>[Calls]<UL><LI><a href="#[83]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RCC_GetClocksFreq
 </UL>
-<BR>[Called By]<UL><LI><a href="#[77]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;I2C_EEPROM_Init
+<BR>[Called By]<UL><LI><a href="#[7c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;I2C_EEPROM_Init
 </UL>
 
 <P><STRONG><a name="[71]"></a>I2C_ReceiveData</STRONG> (Thumb, 8 bytes, Stack size 0 bytes, stm32f4xx_i2c.o(i.I2C_ReceiveData))
@@ -563,47 +568,48 @@ Global Symbols
 </UL>
 
 <P><STRONG><a name="[6e]"></a>I2C_Send7bitAddress</STRONG> (Thumb, 16 bytes, Stack size 0 bytes, stm32f4xx_i2c.o(i.I2C_Send7bitAddress))
-<BR><BR>[Called By]<UL><LI><a href="#[76]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;EEPROM_WriteByte
-<LI><a href="#[6a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;EEPROM_ReadByte
+<BR><BR>[Called By]<UL><LI><a href="#[6a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;EEPROM_ReadByte
+<LI><a href="#[7a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;EEPROM_WritePage
+<LI><a href="#[77]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;EEPROM_WaitReady
 </UL>
 
 <P><STRONG><a name="[6f]"></a>I2C_SendData</STRONG> (Thumb, 4 bytes, Stack size 0 bytes, stm32f4xx_i2c.o(i.I2C_SendData))
-<BR><BR>[Called By]<UL><LI><a href="#[76]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;EEPROM_WriteByte
-<LI><a href="#[6a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;EEPROM_ReadByte
+<BR><BR>[Called By]<UL><LI><a href="#[6a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;EEPROM_ReadByte
+<LI><a href="#[7a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;EEPROM_WritePage
 </UL>
 
-<P><STRONG><a name="[80]"></a>KEY0_Scan</STRONG> (Thumb, 50 bytes, Stack size 8 bytes, key.o(i.KEY0_Scan))
+<P><STRONG><a name="[85]"></a>KEY0_Scan</STRONG> (Thumb, 50 bytes, Stack size 8 bytes, key.o(i.KEY0_Scan))
 <BR><BR>[Stack]<UL><LI>Max Depth = 8<LI>Call Chain = KEY0_Scan
 </UL>
-<BR>[Calls]<UL><LI><a href="#[81]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;GPIO_ReadInputDataBit
-<LI><a href="#[82]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Delay_ms
+<BR>[Calls]<UL><LI><a href="#[86]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;GPIO_ReadInputDataBit
+<LI><a href="#[7b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Delay_ms
 </UL>
 <BR>[Called By]<UL><LI><a href="#[5c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
 </UL>
 
-<P><STRONG><a name="[83]"></a>KEY1_Scan</STRONG> (Thumb, 50 bytes, Stack size 8 bytes, key.o(i.KEY1_Scan))
+<P><STRONG><a name="[87]"></a>KEY1_Scan</STRONG> (Thumb, 50 bytes, Stack size 8 bytes, key.o(i.KEY1_Scan))
 <BR><BR>[Stack]<UL><LI>Max Depth = 8<LI>Call Chain = KEY1_Scan
 </UL>
-<BR>[Calls]<UL><LI><a href="#[81]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;GPIO_ReadInputDataBit
-<LI><a href="#[82]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Delay_ms
+<BR>[Calls]<UL><LI><a href="#[86]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;GPIO_ReadInputDataBit
+<LI><a href="#[7b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Delay_ms
 </UL>
 <BR>[Called By]<UL><LI><a href="#[5c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
 </UL>
 
-<P><STRONG><a name="[84]"></a>KEY_Init</STRONG> (Thumb, 96 bytes, Stack size 16 bytes, key.o(i.KEY_Init))
+<P><STRONG><a name="[88]"></a>KEY_Init</STRONG> (Thumb, 96 bytes, Stack size 16 bytes, key.o(i.KEY_Init))
 <BR><BR>[Stack]<UL><LI>Max Depth = 36<LI>Call Chain = KEY_Init &rArr; GPIO_Init
 </UL>
-<BR>[Calls]<UL><LI><a href="#[7a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;GPIO_Init
-<LI><a href="#[79]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RCC_AHB1PeriphClockCmd
+<BR>[Calls]<UL><LI><a href="#[7f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;GPIO_Init
+<LI><a href="#[7e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RCC_AHB1PeriphClockCmd
 </UL>
 <BR>[Called By]<UL><LI><a href="#[5c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
 </UL>
 
-<P><STRONG><a name="[85]"></a>KEY_Scan</STRONG> (Thumb, 54 bytes, Stack size 8 bytes, key.o(i.KEY_Scan))
+<P><STRONG><a name="[89]"></a>KEY_Scan</STRONG> (Thumb, 54 bytes, Stack size 8 bytes, key.o(i.KEY_Scan))
 <BR><BR>[Stack]<UL><LI>Max Depth = 8<LI>Call Chain = KEY_Scan
 </UL>
-<BR>[Calls]<UL><LI><a href="#[81]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;GPIO_ReadInputDataBit
-<LI><a href="#[82]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Delay_ms
+<BR>[Calls]<UL><LI><a href="#[86]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;GPIO_ReadInputDataBit
+<LI><a href="#[7b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Delay_ms
 </UL>
 <BR>[Called By]<UL><LI><a href="#[5c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
 </UL>
@@ -617,171 +623,171 @@ Global Symbols
 <P><STRONG><a name="[8]"></a>PendSV_Handler</STRONG> (Thumb, 2 bytes, Stack size 0 bytes, stm32f4xx_it.o(i.PendSV_Handler))
 <BR>[Address Reference Count : 1]<UL><LI> startup_stm32f40_41xxx.o(RESET)
 </UL>
-<P><STRONG><a name="[79]"></a>RCC_AHB1PeriphClockCmd</STRONG> (Thumb, 26 bytes, Stack size 0 bytes, stm32f4xx_rcc.o(i.RCC_AHB1PeriphClockCmd))
-<BR><BR>[Called By]<UL><LI><a href="#[99]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;USART1_Init
-<LI><a href="#[84]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;KEY_Init
-<LI><a href="#[77]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;I2C_EEPROM_Init
+<P><STRONG><a name="[7e]"></a>RCC_AHB1PeriphClockCmd</STRONG> (Thumb, 26 bytes, Stack size 0 bytes, stm32f4xx_rcc.o(i.RCC_AHB1PeriphClockCmd))
+<BR><BR>[Called By]<UL><LI><a href="#[9e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;USART1_Init
+<LI><a href="#[88]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;KEY_Init
+<LI><a href="#[7c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;I2C_EEPROM_Init
 </UL>
 
-<P><STRONG><a name="[78]"></a>RCC_APB1PeriphClockCmd</STRONG> (Thumb, 26 bytes, Stack size 0 bytes, stm32f4xx_rcc.o(i.RCC_APB1PeriphClockCmd))
-<BR><BR>[Called By]<UL><LI><a href="#[77]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;I2C_EEPROM_Init
+<P><STRONG><a name="[7d]"></a>RCC_APB1PeriphClockCmd</STRONG> (Thumb, 26 bytes, Stack size 0 bytes, stm32f4xx_rcc.o(i.RCC_APB1PeriphClockCmd))
+<BR><BR>[Called By]<UL><LI><a href="#[7c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;I2C_EEPROM_Init
 </UL>
 
-<P><STRONG><a name="[9a]"></a>RCC_APB2PeriphClockCmd</STRONG> (Thumb, 26 bytes, Stack size 0 bytes, stm32f4xx_rcc.o(i.RCC_APB2PeriphClockCmd))
-<BR><BR>[Called By]<UL><LI><a href="#[99]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;USART1_Init
+<P><STRONG><a name="[9f]"></a>RCC_APB2PeriphClockCmd</STRONG> (Thumb, 26 bytes, Stack size 0 bytes, stm32f4xx_rcc.o(i.RCC_APB2PeriphClockCmd))
+<BR><BR>[Called By]<UL><LI><a href="#[9e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;USART1_Init
 </UL>
 
-<P><STRONG><a name="[8d]"></a>RCC_DeInit</STRONG> (Thumb, 82 bytes, Stack size 0 bytes, stm32f4xx_rcc.o(i.RCC_DeInit))
-<BR><BR>[Called By]<UL><LI><a href="#[8c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SystemClock_Config
+<P><STRONG><a name="[92]"></a>RCC_DeInit</STRONG> (Thumb, 82 bytes, Stack size 0 bytes, stm32f4xx_rcc.o(i.RCC_DeInit))
+<BR><BR>[Called By]<UL><LI><a href="#[91]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SystemClock_Config
 </UL>
 
-<P><STRONG><a name="[7e]"></a>RCC_GetClocksFreq</STRONG> (Thumb, 214 bytes, Stack size 20 bytes, stm32f4xx_rcc.o(i.RCC_GetClocksFreq))
+<P><STRONG><a name="[83]"></a>RCC_GetClocksFreq</STRONG> (Thumb, 214 bytes, Stack size 20 bytes, stm32f4xx_rcc.o(i.RCC_GetClocksFreq))
 <BR><BR>[Stack]<UL><LI>Max Depth = 20<LI>Call Chain = RCC_GetClocksFreq
 </UL>
-<BR>[Called By]<UL><LI><a href="#[7c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;I2C_Init
-<LI><a href="#[9b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;USART_Init
+<BR>[Called By]<UL><LI><a href="#[81]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;I2C_Init
+<LI><a href="#[a0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;USART_Init
 </UL>
 
-<P><STRONG><a name="[8f]"></a>RCC_GetFlagStatus</STRONG> (Thumb, 60 bytes, Stack size 8 bytes, stm32f4xx_rcc.o(i.RCC_GetFlagStatus))
+<P><STRONG><a name="[94]"></a>RCC_GetFlagStatus</STRONG> (Thumb, 60 bytes, Stack size 8 bytes, stm32f4xx_rcc.o(i.RCC_GetFlagStatus))
 <BR><BR>[Stack]<UL><LI>Max Depth = 8<LI>Call Chain = RCC_GetFlagStatus
 </UL>
-<BR>[Called By]<UL><LI><a href="#[8c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SystemClock_Config
+<BR>[Called By]<UL><LI><a href="#[91]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SystemClock_Config
 </UL>
 
-<P><STRONG><a name="[93]"></a>RCC_GetSYSCLKSource</STRONG> (Thumb, 10 bytes, Stack size 0 bytes, stm32f4xx_rcc.o(i.RCC_GetSYSCLKSource))
-<BR><BR>[Called By]<UL><LI><a href="#[8c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SystemClock_Config
+<P><STRONG><a name="[98]"></a>RCC_GetSYSCLKSource</STRONG> (Thumb, 10 bytes, Stack size 0 bytes, stm32f4xx_rcc.o(i.RCC_GetSYSCLKSource))
+<BR><BR>[Called By]<UL><LI><a href="#[91]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SystemClock_Config
 </UL>
 
-<P><STRONG><a name="[94]"></a>RCC_HCLKConfig</STRONG> (Thumb, 18 bytes, Stack size 0 bytes, stm32f4xx_rcc.o(i.RCC_HCLKConfig))
-<BR><BR>[Called By]<UL><LI><a href="#[8c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SystemClock_Config
+<P><STRONG><a name="[99]"></a>RCC_HCLKConfig</STRONG> (Thumb, 18 bytes, Stack size 0 bytes, stm32f4xx_rcc.o(i.RCC_HCLKConfig))
+<BR><BR>[Called By]<UL><LI><a href="#[91]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SystemClock_Config
 </UL>
 
-<P><STRONG><a name="[8e]"></a>RCC_HSEConfig</STRONG> (Thumb, 12 bytes, Stack size 0 bytes, stm32f4xx_rcc.o(i.RCC_HSEConfig))
-<BR><BR>[Called By]<UL><LI><a href="#[8c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SystemClock_Config
+<P><STRONG><a name="[93]"></a>RCC_HSEConfig</STRONG> (Thumb, 12 bytes, Stack size 0 bytes, stm32f4xx_rcc.o(i.RCC_HSEConfig))
+<BR><BR>[Called By]<UL><LI><a href="#[91]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SystemClock_Config
 </UL>
 
-<P><STRONG><a name="[95]"></a>RCC_PCLK1Config</STRONG> (Thumb, 18 bytes, Stack size 0 bytes, stm32f4xx_rcc.o(i.RCC_PCLK1Config))
-<BR><BR>[Called By]<UL><LI><a href="#[8c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SystemClock_Config
+<P><STRONG><a name="[9a]"></a>RCC_PCLK1Config</STRONG> (Thumb, 18 bytes, Stack size 0 bytes, stm32f4xx_rcc.o(i.RCC_PCLK1Config))
+<BR><BR>[Called By]<UL><LI><a href="#[91]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SystemClock_Config
 </UL>
 
-<P><STRONG><a name="[96]"></a>RCC_PCLK2Config</STRONG> (Thumb, 20 bytes, Stack size 0 bytes, stm32f4xx_rcc.o(i.RCC_PCLK2Config))
-<BR><BR>[Called By]<UL><LI><a href="#[8c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SystemClock_Config
+<P><STRONG><a name="[9b]"></a>RCC_PCLK2Config</STRONG> (Thumb, 20 bytes, Stack size 0 bytes, stm32f4xx_rcc.o(i.RCC_PCLK2Config))
+<BR><BR>[Called By]<UL><LI><a href="#[91]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SystemClock_Config
 </UL>
 
-<P><STRONG><a name="[91]"></a>RCC_PLLCmd</STRONG> (Thumb, 6 bytes, Stack size 0 bytes, stm32f4xx_rcc.o(i.RCC_PLLCmd))
-<BR><BR>[Called By]<UL><LI><a href="#[8c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SystemClock_Config
+<P><STRONG><a name="[96]"></a>RCC_PLLCmd</STRONG> (Thumb, 6 bytes, Stack size 0 bytes, stm32f4xx_rcc.o(i.RCC_PLLCmd))
+<BR><BR>[Called By]<UL><LI><a href="#[91]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SystemClock_Config
 </UL>
 
-<P><STRONG><a name="[90]"></a>RCC_PLLConfig</STRONG> (Thumb, 30 bytes, Stack size 16 bytes, stm32f4xx_rcc.o(i.RCC_PLLConfig))
+<P><STRONG><a name="[95]"></a>RCC_PLLConfig</STRONG> (Thumb, 30 bytes, Stack size 16 bytes, stm32f4xx_rcc.o(i.RCC_PLLConfig))
 <BR><BR>[Stack]<UL><LI>Max Depth = 16<LI>Call Chain = RCC_PLLConfig
 </UL>
-<BR>[Called By]<UL><LI><a href="#[8c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SystemClock_Config
+<BR>[Called By]<UL><LI><a href="#[91]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SystemClock_Config
 </UL>
 
-<P><STRONG><a name="[92]"></a>RCC_SYSCLKConfig</STRONG> (Thumb, 18 bytes, Stack size 0 bytes, stm32f4xx_rcc.o(i.RCC_SYSCLKConfig))
-<BR><BR>[Called By]<UL><LI><a href="#[8c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SystemClock_Config
+<P><STRONG><a name="[97]"></a>RCC_SYSCLKConfig</STRONG> (Thumb, 18 bytes, Stack size 0 bytes, stm32f4xx_rcc.o(i.RCC_SYSCLKConfig))
+<BR><BR>[Called By]<UL><LI><a href="#[91]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SystemClock_Config
 </UL>
 
 <P><STRONG><a name="[6]"></a>SVC_Handler</STRONG> (Thumb, 2 bytes, Stack size 0 bytes, stm32f4xx_it.o(i.SVC_Handler))
 <BR>[Address Reference Count : 1]<UL><LI> startup_stm32f40_41xxx.o(RESET)
 </UL>
-<P><STRONG><a name="[8b]"></a>SysTick_CLKSourceConfig</STRONG> (Thumb, 40 bytes, Stack size 0 bytes, misc.o(i.SysTick_CLKSourceConfig))
-<BR><BR>[Called By]<UL><LI><a href="#[8a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SysTick_Init
+<P><STRONG><a name="[90]"></a>SysTick_CLKSourceConfig</STRONG> (Thumb, 40 bytes, Stack size 0 bytes, misc.o(i.SysTick_CLKSourceConfig))
+<BR><BR>[Called By]<UL><LI><a href="#[8f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SysTick_Init
 </UL>
 
 <P><STRONG><a name="[9]"></a>SysTick_Handler</STRONG> (Thumb, 2 bytes, Stack size 0 bytes, stm32f4xx_it.o(i.SysTick_Handler))
 <BR>[Address Reference Count : 1]<UL><LI> startup_stm32f40_41xxx.o(RESET)
 </UL>
-<P><STRONG><a name="[8a]"></a>SysTick_Init</STRONG> (Thumb, 12 bytes, Stack size 8 bytes, delay.o(i.SysTick_Init))
+<P><STRONG><a name="[8f]"></a>SysTick_Init</STRONG> (Thumb, 12 bytes, Stack size 8 bytes, delay.o(i.SysTick_Init))
 <BR><BR>[Stack]<UL><LI>Max Depth = 8<LI>Call Chain = SysTick_Init
 </UL>
-<BR>[Calls]<UL><LI><a href="#[8b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SysTick_CLKSourceConfig
+<BR>[Calls]<UL><LI><a href="#[90]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SysTick_CLKSourceConfig
 </UL>
 <BR>[Called By]<UL><LI><a href="#[5c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
 </UL>
 
-<P><STRONG><a name="[8c]"></a>SystemClock_Config</STRONG> (Thumb, 104 bytes, Stack size 8 bytes, main.o(i.SystemClock_Config))
+<P><STRONG><a name="[91]"></a>SystemClock_Config</STRONG> (Thumb, 104 bytes, Stack size 8 bytes, main.o(i.SystemClock_Config))
 <BR><BR>[Stack]<UL><LI>Max Depth = 24<LI>Call Chain = SystemClock_Config &rArr; RCC_PLLConfig
 </UL>
-<BR>[Calls]<UL><LI><a href="#[92]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RCC_SYSCLKConfig
-<LI><a href="#[90]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RCC_PLLConfig
-<LI><a href="#[91]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RCC_PLLCmd
-<LI><a href="#[96]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RCC_PCLK2Config
-<LI><a href="#[95]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RCC_PCLK1Config
-<LI><a href="#[8e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RCC_HSEConfig
-<LI><a href="#[94]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RCC_HCLKConfig
-<LI><a href="#[93]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RCC_GetSYSCLKSource
-<LI><a href="#[8f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RCC_GetFlagStatus
-<LI><a href="#[8d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RCC_DeInit
-<LI><a href="#[97]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SystemCoreClockUpdate
+<BR>[Calls]<UL><LI><a href="#[97]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RCC_SYSCLKConfig
+<LI><a href="#[95]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RCC_PLLConfig
+<LI><a href="#[96]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RCC_PLLCmd
+<LI><a href="#[9b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RCC_PCLK2Config
+<LI><a href="#[9a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RCC_PCLK1Config
+<LI><a href="#[93]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RCC_HSEConfig
+<LI><a href="#[99]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RCC_HCLKConfig
+<LI><a href="#[98]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RCC_GetSYSCLKSource
+<LI><a href="#[94]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RCC_GetFlagStatus
+<LI><a href="#[92]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RCC_DeInit
+<LI><a href="#[9c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SystemCoreClockUpdate
 </UL>
 <BR>[Called By]<UL><LI><a href="#[5c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
 </UL>
 
-<P><STRONG><a name="[97]"></a>SystemCoreClockUpdate</STRONG> (Thumb, 170 bytes, Stack size 16 bytes, system_stm32f4xx.o(i.SystemCoreClockUpdate))
+<P><STRONG><a name="[9c]"></a>SystemCoreClockUpdate</STRONG> (Thumb, 170 bytes, Stack size 16 bytes, system_stm32f4xx.o(i.SystemCoreClockUpdate))
 <BR><BR>[Stack]<UL><LI>Max Depth = 16<LI>Call Chain = SystemCoreClockUpdate
 </UL>
-<BR>[Called By]<UL><LI><a href="#[8c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SystemClock_Config
+<BR>[Called By]<UL><LI><a href="#[91]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SystemClock_Config
 </UL>
 
 <P><STRONG><a name="[5d]"></a>SystemInit</STRONG> (Thumb, 88 bytes, Stack size 8 bytes, system_stm32f4xx.o(i.SystemInit))
 <BR><BR>[Stack]<UL><LI>Max Depth = 20<LI>Call Chain = SystemInit &rArr; SetSysClock
 </UL>
-<BR>[Calls]<UL><LI><a href="#[98]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SetSysClock
+<BR>[Calls]<UL><LI><a href="#[9d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SetSysClock
 </UL>
 <BR>[Address Reference Count : 1]<UL><LI> startup_stm32f40_41xxx.o(.text)
 </UL>
-<P><STRONG><a name="[99]"></a>USART1_Init</STRONG> (Thumb, 128 bytes, Stack size 32 bytes, uart.o(i.USART1_Init))
+<P><STRONG><a name="[9e]"></a>USART1_Init</STRONG> (Thumb, 128 bytes, Stack size 32 bytes, uart.o(i.USART1_Init))
 <BR><BR>[Stack]<UL><LI>Max Depth = 100<LI>Call Chain = USART1_Init &rArr; USART_Init &rArr; RCC_GetClocksFreq
 </UL>
-<BR>[Calls]<UL><LI><a href="#[7b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;GPIO_PinAFConfig
-<LI><a href="#[7a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;GPIO_Init
-<LI><a href="#[9b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;USART_Init
-<LI><a href="#[9c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;USART_Cmd
-<LI><a href="#[9a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RCC_APB2PeriphClockCmd
-<LI><a href="#[79]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RCC_AHB1PeriphClockCmd
+<BR>[Calls]<UL><LI><a href="#[80]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;GPIO_PinAFConfig
+<LI><a href="#[7f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;GPIO_Init
+<LI><a href="#[a0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;USART_Init
+<LI><a href="#[a1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;USART_Cmd
+<LI><a href="#[9f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RCC_APB2PeriphClockCmd
+<LI><a href="#[7e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RCC_AHB1PeriphClockCmd
 </UL>
 <BR>[Called By]<UL><LI><a href="#[5c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
 </UL>
 
-<P><STRONG><a name="[9c]"></a>USART_Cmd</STRONG> (Thumb, 24 bytes, Stack size 0 bytes, stm32f4xx_usart.o(i.USART_Cmd))
-<BR><BR>[Called By]<UL><LI><a href="#[99]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;USART1_Init
+<P><STRONG><a name="[a1]"></a>USART_Cmd</STRONG> (Thumb, 24 bytes, Stack size 0 bytes, stm32f4xx_usart.o(i.USART_Cmd))
+<BR><BR>[Called By]<UL><LI><a href="#[9e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;USART1_Init
 </UL>
 
-<P><STRONG><a name="[9e]"></a>USART_GetFlagStatus</STRONG> (Thumb, 26 bytes, Stack size 0 bytes, stm32f4xx_usart.o(i.USART_GetFlagStatus))
-<BR><BR>[Called By]<UL><LI><a href="#[9d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;USART_SendChar
+<P><STRONG><a name="[a3]"></a>USART_GetFlagStatus</STRONG> (Thumb, 26 bytes, Stack size 0 bytes, stm32f4xx_usart.o(i.USART_GetFlagStatus))
+<BR><BR>[Called By]<UL><LI><a href="#[a2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;USART_SendChar
 </UL>
 
-<P><STRONG><a name="[9b]"></a>USART_Init</STRONG> (Thumb, 204 bytes, Stack size 48 bytes, stm32f4xx_usart.o(i.USART_Init))
+<P><STRONG><a name="[a0]"></a>USART_Init</STRONG> (Thumb, 204 bytes, Stack size 48 bytes, stm32f4xx_usart.o(i.USART_Init))
 <BR><BR>[Stack]<UL><LI>Max Depth = 68<LI>Call Chain = USART_Init &rArr; RCC_GetClocksFreq
 </UL>
-<BR>[Calls]<UL><LI><a href="#[7e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RCC_GetClocksFreq
+<BR>[Calls]<UL><LI><a href="#[83]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RCC_GetClocksFreq
 </UL>
-<BR>[Called By]<UL><LI><a href="#[99]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;USART1_Init
+<BR>[Called By]<UL><LI><a href="#[9e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;USART1_Init
 </UL>
 
-<P><STRONG><a name="[9d]"></a>USART_SendChar</STRONG> (Thumb, 28 bytes, Stack size 8 bytes, uart.o(i.USART_SendChar))
+<P><STRONG><a name="[a2]"></a>USART_SendChar</STRONG> (Thumb, 28 bytes, Stack size 8 bytes, uart.o(i.USART_SendChar))
 <BR><BR>[Stack]<UL><LI>Max Depth = 8<LI>Call Chain = USART_SendChar
 </UL>
-<BR>[Calls]<UL><LI><a href="#[9f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;USART_SendData
-<LI><a href="#[9e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;USART_GetFlagStatus
+<BR>[Calls]<UL><LI><a href="#[a4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;USART_SendData
+<LI><a href="#[a3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;USART_GetFlagStatus
 </UL>
-<BR>[Called By]<UL><LI><a href="#[88]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;USART_SendDec
+<BR>[Called By]<UL><LI><a href="#[8c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;USART_SendDec
 <LI><a href="#[74]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;USART_SendString
 </UL>
 
-<P><STRONG><a name="[9f]"></a>USART_SendData</STRONG> (Thumb, 8 bytes, Stack size 0 bytes, stm32f4xx_usart.o(i.USART_SendData))
-<BR><BR>[Called By]<UL><LI><a href="#[9d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;USART_SendChar
+<P><STRONG><a name="[a4]"></a>USART_SendData</STRONG> (Thumb, 8 bytes, Stack size 0 bytes, stm32f4xx_usart.o(i.USART_SendData))
+<BR><BR>[Called By]<UL><LI><a href="#[a2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;USART_SendChar
 </UL>
 
-<P><STRONG><a name="[88]"></a>USART_SendDec</STRONG> (Thumb, 76 bytes, Stack size 24 bytes, uart.o(i.USART_SendDec))
+<P><STRONG><a name="[8c]"></a>USART_SendDec</STRONG> (Thumb, 76 bytes, Stack size 24 bytes, uart.o(i.USART_SendDec))
 <BR><BR>[Stack]<UL><LI>Max Depth = 32<LI>Call Chain = USART_SendDec &rArr; USART_SendChar
 </UL>
-<BR>[Calls]<UL><LI><a href="#[9d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;USART_SendChar
+<BR>[Calls]<UL><LI><a href="#[a2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;USART_SendChar
 </UL>
-<BR>[Called By]<UL><LI><a href="#[89]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;PageTestStop
+<BR>[Called By]<UL><LI><a href="#[8e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;PageTestStop
 <LI><a href="#[67]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;PageTestStep
-<LI><a href="#[87]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;LifeTestStop
+<LI><a href="#[8b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;LifeTestStop
 <LI><a href="#[63]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;LifeTestStep
 </UL>
 
@@ -790,27 +796,28 @@ Global Symbols
 </UL>
 <BR>[Calls]<UL><LI><a href="#[74]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;USART_SendString
 </UL>
-<BR>[Called By]<UL><LI><a href="#[67]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;PageTestStep
-<LI><a href="#[69]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;PageTestStart
+<BR>[Called By]<UL><LI><a href="#[69]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;PageTestStart
+<LI><a href="#[8d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;PageTestReportMismatch
 <LI><a href="#[63]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;LifeTestStep
 <LI><a href="#[65]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;LifeTestStart
-<LI><a href="#[86]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;LifeTestReportMismatch
+<LI><a href="#[8a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;LifeTestReportMismatch
 <LI><a href="#[73]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;EEPROM_RunSingleAddressDemo
 </UL>
 
 <P><STRONG><a name="[74]"></a>USART_SendString</STRONG> (Thumb, 24 bytes, Stack size 8 bytes, uart.o(i.USART_SendString))
 <BR><BR>[Stack]<UL><LI>Max Depth = 16<LI>Call Chain = USART_SendString &rArr; USART_SendChar
 </UL>
-<BR>[Calls]<UL><LI><a href="#[9d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;USART_SendChar
+<BR>[Calls]<UL><LI><a href="#[a2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;USART_SendChar
 </UL>
 <BR>[Called By]<UL><LI><a href="#[75]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;USART_SendHex
-<LI><a href="#[89]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;PageTestStop
+<LI><a href="#[8e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;PageTestStop
 <LI><a href="#[67]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;PageTestStep
 <LI><a href="#[69]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;PageTestStart
-<LI><a href="#[87]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;LifeTestStop
+<LI><a href="#[8d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;PageTestReportMismatch
+<LI><a href="#[8b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;LifeTestStop
 <LI><a href="#[63]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;LifeTestStep
 <LI><a href="#[65]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;LifeTestStart
-<LI><a href="#[86]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;LifeTestReportMismatch
+<LI><a href="#[8a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;LifeTestReportMismatch
 <LI><a href="#[73]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;EEPROM_RunSingleAddressDemo
 <LI><a href="#[5c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
 </UL>
@@ -818,57 +825,87 @@ Global Symbols
 <P><STRONG><a name="[5]"></a>UsageFault_Handler</STRONG> (Thumb, 4 bytes, Stack size 0 bytes, stm32f4xx_it.o(i.UsageFault_Handler))
 <BR>[Address Reference Count : 1]<UL><LI> startup_stm32f40_41xxx.o(RESET)
 </UL>
-<P><STRONG><a name="[a7]"></a>__scatterload_copy</STRONG> (Thumb, 14 bytes, Stack size unknown bytes, handlers.o(i.__scatterload_copy), UNUSED)
+<P><STRONG><a name="[ac]"></a>__scatterload_copy</STRONG> (Thumb, 14 bytes, Stack size unknown bytes, handlers.o(i.__scatterload_copy), UNUSED)
 
-<P><STRONG><a name="[a8]"></a>__scatterload_null</STRONG> (Thumb, 2 bytes, Stack size unknown bytes, handlers.o(i.__scatterload_null), UNUSED)
+<P><STRONG><a name="[ad]"></a>__scatterload_null</STRONG> (Thumb, 2 bytes, Stack size unknown bytes, handlers.o(i.__scatterload_null), UNUSED)
 
-<P><STRONG><a name="[a9]"></a>__scatterload_zeroinit</STRONG> (Thumb, 14 bytes, Stack size unknown bytes, handlers.o(i.__scatterload_zeroinit), UNUSED)
+<P><STRONG><a name="[ae]"></a>__scatterload_zeroinit</STRONG> (Thumb, 14 bytes, Stack size unknown bytes, handlers.o(i.__scatterload_zeroinit), UNUSED)
 
 <P><STRONG><a name="[5c]"></a>main</STRONG> (Thumb, 104 bytes, Stack size 0 bytes, main.o(i.main))
-<BR><BR>[Stack]<UL><LI>Max Depth = 100<LI>Call Chain = main &rArr; USART1_Init &rArr; USART_Init &rArr; RCC_GetClocksFreq
+<BR><BR>[Stack]<UL><LI>Max Depth = 120<LI>Call Chain = main &rArr; EEPROM_LifeTestStep &rArr; LifeTestStep &rArr; EEPROM_WriteByte &rArr; EEPROM_WritePage &rArr; EEPROM_WaitReady &rArr; I2C_WaitEvent &rArr; I2C_CheckEvent
 </UL>
 <BR>[Calls]<UL><LI><a href="#[74]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;USART_SendString
-<LI><a href="#[99]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;USART1_Init
-<LI><a href="#[8a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SysTick_Init
-<LI><a href="#[85]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;KEY_Scan
-<LI><a href="#[84]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;KEY_Init
-<LI><a href="#[83]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;KEY1_Scan
-<LI><a href="#[80]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;KEY0_Scan
-<LI><a href="#[77]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;I2C_EEPROM_Init
+<LI><a href="#[9e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;USART1_Init
+<LI><a href="#[8f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SysTick_Init
+<LI><a href="#[89]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;KEY_Scan
+<LI><a href="#[88]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;KEY_Init
+<LI><a href="#[87]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;KEY1_Scan
+<LI><a href="#[85]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;KEY0_Scan
+<LI><a href="#[7c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;I2C_EEPROM_Init
 <LI><a href="#[73]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;EEPROM_RunSingleAddressDemo
 <LI><a href="#[68]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;EEPROM_PageTestToggle
 <LI><a href="#[66]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;EEPROM_PageTestStep
 <LI><a href="#[64]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;EEPROM_LifeTestToggle
 <LI><a href="#[62]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;EEPROM_LifeTestStep
-<LI><a href="#[82]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Delay_ms
-<LI><a href="#[8c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SystemClock_Config
+<LI><a href="#[7b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Delay_ms
+<LI><a href="#[91]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SystemClock_Config
 </UL>
 <BR>[Address Reference Count : 1]<UL><LI> entry9a.o(.ARM.Collect$$$$0000000B)
 </UL><P>
 <H3>
 Local Symbols
 </H3>
-<P><STRONG><a name="[98]"></a>SetSysClock</STRONG> (Thumb, 220 bytes, Stack size 12 bytes, system_stm32f4xx.o(i.SetSysClock))
+<P><STRONG><a name="[9d]"></a>SetSysClock</STRONG> (Thumb, 220 bytes, Stack size 12 bytes, system_stm32f4xx.o(i.SetSysClock))
 <BR><BR>[Stack]<UL><LI>Max Depth = 12<LI>Call Chain = SetSysClock
 </UL>
 <BR>[Called By]<UL><LI><a href="#[5d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SystemInit
 </UL>
 
-<P><STRONG><a name="[6b]"></a>GetDeviceAddress</STRONG> (Thumb, 6 bytes, Stack size 0 bytes, iic.o(i.GetDeviceAddress))
-<BR><BR>[Called By]<UL><LI><a href="#[76]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;EEPROM_WriteByte
-<LI><a href="#[6a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;EEPROM_ReadByte
+<P><STRONG><a name="[77]"></a>EEPROM_WaitReady</STRONG> (Thumb, 100 bytes, Stack size 16 bytes, iic.o(i.EEPROM_WaitReady))
+<BR><BR>[Stack]<UL><LI>Max Depth = 48<LI>Call Chain = EEPROM_WaitReady &rArr; I2C_WaitEvent &rArr; I2C_CheckEvent
+</UL>
+<BR>[Calls]<UL><LI><a href="#[6e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;I2C_Send7bitAddress
+<LI><a href="#[72]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;I2C_GenerateSTOP
+<LI><a href="#[6c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;I2C_GenerateSTART
+<LI><a href="#[78]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;I2C_ClearFlag
+<LI><a href="#[6d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;I2C_WaitEvent
+<LI><a href="#[79]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Delay_us
+</UL>
+<BR>[Called By]<UL><LI><a href="#[7a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;EEPROM_WritePage
+</UL>
+
+<P><STRONG><a name="[7a]"></a>EEPROM_WritePage</STRONG> (Thumb, 212 bytes, Stack size 32 bytes, iic.o(i.EEPROM_WritePage))
+<BR><BR>[Stack]<UL><LI>Max Depth = 80<LI>Call Chain = EEPROM_WritePage &rArr; EEPROM_WaitReady &rArr; I2C_WaitEvent &rArr; I2C_CheckEvent
+</UL>
+<BR>[Calls]<UL><LI><a href="#[6f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;I2C_SendData
+<LI><a href="#[6e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;I2C_Send7bitAddress
+<LI><a href="#[72]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;I2C_GenerateSTOP
+<LI><a href="#[6c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;I2C_GenerateSTART
+<LI><a href="#[6d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;I2C_WaitEvent
+<LI><a href="#[6b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;GetDeviceAddress
+<LI><a href="#[77]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;EEPROM_WaitReady
+<LI><a href="#[7b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Delay_ms
+</UL>
+<BR>[Called By]<UL><LI><a href="#[76]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;EEPROM_WriteByte
+<LI><a href="#[67]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;PageTestStep
+</UL>
+
+<P><STRONG><a name="[6b]"></a>GetDeviceAddress</STRONG> (Thumb, 16 bytes, Stack size 0 bytes, iic.o(i.GetDeviceAddress))
+<BR><BR>[Called By]<UL><LI><a href="#[6a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;EEPROM_ReadByte
+<LI><a href="#[7a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;EEPROM_WritePage
 </UL>
 
 <P><STRONG><a name="[6d]"></a>I2C_WaitEvent</STRONG> (Thumb, 36 bytes, Stack size 16 bytes, iic.o(i.I2C_WaitEvent))
 <BR><BR>[Stack]<UL><LI>Max Depth = 32<LI>Call Chain = I2C_WaitEvent &rArr; I2C_CheckEvent
 </UL>
-<BR>[Calls]<UL><LI><a href="#[7f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;I2C_CheckEvent
+<BR>[Calls]<UL><LI><a href="#[84]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;I2C_CheckEvent
 </UL>
-<BR>[Called By]<UL><LI><a href="#[76]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;EEPROM_WriteByte
-<LI><a href="#[6a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;EEPROM_ReadByte
+<BR>[Called By]<UL><LI><a href="#[6a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;EEPROM_ReadByte
+<LI><a href="#[7a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;EEPROM_WritePage
+<LI><a href="#[77]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;EEPROM_WaitReady
 </UL>
 
-<P><STRONG><a name="[86]"></a>LifeTestReportMismatch</STRONG> (Thumb, 76 bytes, Stack size 24 bytes, iic.o(i.LifeTestReportMismatch))
+<P><STRONG><a name="[8a]"></a>LifeTestReportMismatch</STRONG> (Thumb, 76 bytes, Stack size 24 bytes, iic.o(i.LifeTestReportMismatch))
 <BR><BR>[Stack]<UL><LI>Max Depth = 64<LI>Call Chain = LifeTestReportMismatch &rArr; USART_SendHex &rArr; USART_SendString &rArr; USART_SendChar
 </UL>
 <BR>[Calls]<UL><LI><a href="#[75]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;USART_SendHex
@@ -886,27 +923,36 @@ Local Symbols
 <BR>[Called By]<UL><LI><a href="#[64]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;EEPROM_LifeTestToggle
 </UL>
 
-<P><STRONG><a name="[63]"></a>LifeTestStep</STRONG> (Thumb, 324 bytes, Stack size 16 bytes, iic.o(i.LifeTestStep))
-<BR><BR>[Stack]<UL><LI>Max Depth = 80<LI>Call Chain = LifeTestStep &rArr; LifeTestReportMismatch &rArr; USART_SendHex &rArr; USART_SendString &rArr; USART_SendChar
+<P><STRONG><a name="[63]"></a>LifeTestStep</STRONG> (Thumb, 316 bytes, Stack size 16 bytes, iic.o(i.LifeTestStep))
+<BR><BR>[Stack]<UL><LI>Max Depth = 112<LI>Call Chain = LifeTestStep &rArr; EEPROM_WriteByte &rArr; EEPROM_WritePage &rArr; EEPROM_WaitReady &rArr; I2C_WaitEvent &rArr; I2C_CheckEvent
 </UL>
 <BR>[Calls]<UL><LI><a href="#[75]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;USART_SendHex
-<LI><a href="#[88]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;USART_SendDec
+<LI><a href="#[8c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;USART_SendDec
 <LI><a href="#[76]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;EEPROM_WriteByte
 <LI><a href="#[6a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;EEPROM_ReadByte
-<LI><a href="#[87]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;LifeTestStop
-<LI><a href="#[86]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;LifeTestReportMismatch
+<LI><a href="#[8b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;LifeTestStop
+<LI><a href="#[8a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;LifeTestReportMismatch
 <LI><a href="#[74]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;USART_SendString
 </UL>
 <BR>[Called By]<UL><LI><a href="#[62]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;EEPROM_LifeTestStep
 </UL>
 
-<P><STRONG><a name="[87]"></a>LifeTestStop</STRONG> (Thumb, 44 bytes, Stack size 8 bytes, iic.o(i.LifeTestStop))
+<P><STRONG><a name="[8b]"></a>LifeTestStop</STRONG> (Thumb, 44 bytes, Stack size 8 bytes, iic.o(i.LifeTestStop))
 <BR><BR>[Stack]<UL><LI>Max Depth = 40<LI>Call Chain = LifeTestStop &rArr; USART_SendDec &rArr; USART_SendChar
 </UL>
-<BR>[Calls]<UL><LI><a href="#[88]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;USART_SendDec
+<BR>[Calls]<UL><LI><a href="#[8c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;USART_SendDec
 <LI><a href="#[74]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;USART_SendString
 </UL>
 <BR>[Called By]<UL><LI><a href="#[63]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;LifeTestStep
+</UL>
+
+<P><STRONG><a name="[8d]"></a>PageTestReportMismatch</STRONG> (Thumb, 58 bytes, Stack size 16 bytes, iic.o(i.PageTestReportMismatch))
+<BR><BR>[Stack]<UL><LI>Max Depth = 56<LI>Call Chain = PageTestReportMismatch &rArr; USART_SendHex &rArr; USART_SendString &rArr; USART_SendChar
+</UL>
+<BR>[Calls]<UL><LI><a href="#[75]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;USART_SendHex
+<LI><a href="#[74]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;USART_SendString
+</UL>
+<BR>[Called By]<UL><LI><a href="#[67]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;PageTestStep
 </UL>
 
 <P><STRONG><a name="[69]"></a>PageTestStart</STRONG> (Thumb, 88 bytes, Stack size 8 bytes, iic.o(i.PageTestStart))
@@ -918,23 +964,23 @@ Local Symbols
 <BR>[Called By]<UL><LI><a href="#[68]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;EEPROM_PageTestToggle
 </UL>
 
-<P><STRONG><a name="[67]"></a>PageTestStep</STRONG> (Thumb, 228 bytes, Stack size 24 bytes, iic.o(i.PageTestStep))
-<BR><BR>[Stack]<UL><LI>Max Depth = 80<LI>Call Chain = PageTestStep &rArr; EEPROM_WriteByte &rArr; I2C_WaitEvent &rArr; I2C_CheckEvent
+<P><STRONG><a name="[67]"></a>PageTestStep</STRONG> (Thumb, 302 bytes, Stack size 24 bytes, iic.o(i.PageTestStep))
+<BR><BR>[Stack]<UL><LI>Max Depth = 104<LI>Call Chain = PageTestStep &rArr; EEPROM_WritePage &rArr; EEPROM_WaitReady &rArr; I2C_WaitEvent &rArr; I2C_CheckEvent
 </UL>
-<BR>[Calls]<UL><LI><a href="#[75]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;USART_SendHex
-<LI><a href="#[88]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;USART_SendDec
-<LI><a href="#[76]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;EEPROM_WriteByte
+<BR>[Calls]<UL><LI><a href="#[8c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;USART_SendDec
 <LI><a href="#[6a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;EEPROM_ReadByte
-<LI><a href="#[89]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;PageTestStop
+<LI><a href="#[8e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;PageTestStop
+<LI><a href="#[8d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;PageTestReportMismatch
+<LI><a href="#[7a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;EEPROM_WritePage
 <LI><a href="#[74]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;USART_SendString
 </UL>
 <BR>[Called By]<UL><LI><a href="#[66]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;EEPROM_PageTestStep
 </UL>
 
-<P><STRONG><a name="[89]"></a>PageTestStop</STRONG> (Thumb, 48 bytes, Stack size 8 bytes, iic.o(i.PageTestStop))
+<P><STRONG><a name="[8e]"></a>PageTestStop</STRONG> (Thumb, 48 bytes, Stack size 8 bytes, iic.o(i.PageTestStop))
 <BR><BR>[Stack]<UL><LI>Max Depth = 40<LI>Call Chain = PageTestStop &rArr; USART_SendDec &rArr; USART_SendChar
 </UL>
-<BR>[Calls]<UL><LI><a href="#[88]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;USART_SendDec
+<BR>[Calls]<UL><LI><a href="#[8c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;USART_SendDec
 <LI><a href="#[74]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;USART_SendString
 </UL>
 <BR>[Called By]<UL><LI><a href="#[67]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;PageTestStep

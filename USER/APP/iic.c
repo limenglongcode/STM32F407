@@ -1,16 +1,16 @@
 /*
  * iic.c
  *
- * I2C memory read/write and test logic.
+ * I2C读写函数
  */
 #include <stddef.h>
 #include <stdint.h>
 #include "stm32f4xx.h"
 #include "stm32f4xx_gpio.h"
-#include "stm32f4xx_i2c.h"
 #include "stm32f4xx_rcc.h"
-#include "config.h"
+#include "stm32f4xx_i2c.h"
 #include "delay.h"
+#include "config.h"
 #include "uart.h"
 
 #define EEPROM_I2C               I2C1
@@ -20,27 +20,43 @@
 #define EEPROM_SCL_PIN           GPIO_Pin_8
 #define EEPROM_SDA_PIN           GPIO_Pin_9
 #define EEPROM_I2C_SPEED         400000U
+
 #define EEPROM_BASE_ADDRESS      0xA0U
 
 static uint8_t I2C_WaitEvent(uint32_t event);
 static uint8_t GetDeviceAddress(uint32_t addr);
 static uint8_t EEPROM_WaitReady(uint8_t dev_addr);
+static uint8_t EEPROM_WritePage(uint32_t addr, const uint8_t *data, uint16_t len);
 static void LifeTestStart(void);
 static void LifeTestStop(const char *reason);
-static void LifeTestReportMismatch(uint32_t addr, uint8_t expected, uint8_t actual, const char *stage);
 static void LifeTestStep(void);
+static void LifeTestReportMismatch(uint32_t addr, uint8_t expected, uint8_t actual, const char *stage);
 static void PageTestStart(void);
 static void PageTestStop(const char *reason);
 static void PageTestStep(void);
+static void PageTestReportMismatch(uint32_t addr, uint8_t expected, uint8_t actual);
+
+void SystemClock_Config(void);
+void I2C_EEPROM_Init(void);
+uint8_t EEPROM_WriteByte(uint32_t addr, uint8_t data);
+uint8_t EEPROM_ReadByte(uint32_t addr, uint8_t *data);
+void EEPROM_RunSingleAddressDemo(void);
+void EEPROM_LifeTestToggle(void);
+void EEPROM_LifeTestStep(void);
+void EEPROM_PageTestToggle(void);
+void EEPROM_PageTestStep(void);
 
 static uint8_t life_test_running = 0U;
 static uint32_t life_test_counter = 0U;
+static uint8_t life_test_phase = 0U;
+static uint16_t life_test_offset = 0U;
 static uint8_t page_test_running = 0U;
 static uint32_t page_test_counter = 0U;
 static uint8_t page_test_pattern = 0U;
 static volatile uint8_t page_stop_request = 0U;
+static uint8_t page_write_buffer[EEPROM_PAGE_SIZE];
 
-/* 初始化当前所选存储芯片使用的 I2C GPIO 和外设。 */
+/* 初始化当前存储芯片使用的 I2C 外设与 GPIO。 */
 void I2C_EEPROM_Init(void)
 {
     GPIO_InitTypeDef gpio;
@@ -69,7 +85,7 @@ void I2C_EEPROM_Init(void)
     I2C_Cmd(EEPROM_I2C, ENABLE);
 }
 
-/* 等待指定 I2C 事件，带超时保护。 */
+/* 等待指定 I2C 事件，防止总线异常时死循环。 */
 static uint8_t I2C_WaitEvent(uint32_t event)
 {
     uint32_t timeout = EEPROM_TIMEOUT;
@@ -83,19 +99,20 @@ static uint8_t I2C_WaitEvent(uint32_t event)
     return STATUS_OK;
 }
 
-/* 根据当前芯片类型计算实际使用的器件地址。 */
+/* 根据芯片容量与寻址方式，计算当前地址对应的器件地址。 */
 static uint8_t GetDeviceAddress(uint32_t addr)
 {
 #if defined(USE_FM24C02C) || defined(USE_M24512E) || defined(USE_FM24CL64B)
     (void)addr;
     return EEPROM_BASE_ADDRESS;
+#elif defined(USE_FM24NM01AI3)
+    return (uint8_t)(EEPROM_BASE_ADDRESS + (((addr >> 16) & 0x01U) << 1));
 #else
-    uint8_t page = (uint8_t)((addr >> 16) & 0x03U);
-    return (uint8_t)(EEPROM_BASE_ADDRESS + (page << 1));
+    return (uint8_t)(EEPROM_BASE_ADDRESS + (((addr >> 16) & 0x03U) << 1));
 #endif
 }
 
-/* EEPROM 写入后轮询 ACK，确认器件重新就绪。 */
+/* EEPROM 写入后轮询 ACK，确认内部写周期已完成。 */
 static uint8_t EEPROM_WaitReady(uint8_t dev_addr)
 {
     uint32_t timeout = 10U;
@@ -121,13 +138,30 @@ static uint8_t EEPROM_WaitReady(uint8_t dev_addr)
     return STATUS_ERROR;
 }
 
-/* 向目标地址写入 1 个字节。 */
+/* 向指定地址写入一个字节。 */
 uint8_t EEPROM_WriteByte(uint32_t addr, uint8_t data)
+{
+    if (addr >= EEPROM_SIZE) {
+        return STATUS_ERROR;
+    }
+
+    return EEPROM_WritePage(addr, &data, 1U);
+}
+
+/* 按当前页写时序连续写入多个字节。 */
+static uint8_t EEPROM_WritePage(uint32_t addr, const uint8_t *data, uint16_t len)
 {
     uint16_t offset;
     uint8_t dev;
+    uint16_t index;
 
-    if (addr >= EEPROM_SIZE) {
+    if ((data == NULL) || (len == 0U)) {
+        return STATUS_ERROR;
+    }
+    if ((addr + len) > EEPROM_SIZE) {
+        return STATUS_ERROR;
+    }
+    if (((addr % EEPROM_PAGE_SIZE) + len) > EEPROM_PAGE_SIZE) {
         return STATUS_ERROR;
     }
 
@@ -156,9 +190,11 @@ uint8_t EEPROM_WriteByte(uint32_t addr, uint8_t data)
         return STATUS_ERROR;
     }
 
-    I2C_SendData(EEPROM_I2C, data);
-    if (I2C_WaitEvent(I2C_EVENT_MASTER_BYTE_TRANSMITTED) != STATUS_OK) {
-        return STATUS_ERROR;
+    for (index = 0U; index < len; index++) {
+        I2C_SendData(EEPROM_I2C, data[index]);
+        if (I2C_WaitEvent(I2C_EVENT_MASTER_BYTE_TRANSMITTED) != STATUS_OK) {
+            return STATUS_ERROR;
+        }
     }
 
     I2C_GenerateSTOP(EEPROM_I2C, ENABLE);
@@ -176,7 +212,7 @@ uint8_t EEPROM_WriteByte(uint32_t addr, uint8_t data)
     return STATUS_OK;
 }
 
-/* 从目标地址读取 1 个字节。 */
+/* 从指定地址读取一个字节。 */
 uint8_t EEPROM_ReadByte(uint32_t addr, uint8_t *data)
 {
     uint16_t offset;
@@ -275,7 +311,7 @@ void EEPROM_RunSingleAddressDemo(void)
     }
 }
 
-/* 如果 KEY0 字节寿命测试未运行，则启动测试。 */
+/* KEY0 按键启动字节寿命测试。 */
 void EEPROM_LifeTestToggle(void)
 {
     if (!life_test_running) {
@@ -283,7 +319,7 @@ void EEPROM_LifeTestToggle(void)
     }
 }
 
-/* 在主循环中推进一次 KEY0 字节寿命测试。 */
+/* 主循环调用的字节寿命测试步进函数。 */
 void EEPROM_LifeTestStep(void)
 {
     if (life_test_running) {
@@ -291,7 +327,7 @@ void EEPROM_LifeTestStep(void)
     }
 }
 
-/* 如果 KEY1 整页测试未运行，则启动测试。 */
+/* KEY1 按键启动整页寿命测试。 */
 void EEPROM_PageTestToggle(void)
 {
     if (!page_test_running) {
@@ -299,7 +335,7 @@ void EEPROM_PageTestToggle(void)
     }
 }
 
-/* 在主循环中推进一次 KEY1 整页测试。 */
+/* 主循环调用的整页寿命测试步进函数。 */
 void EEPROM_PageTestStep(void)
 {
     if (page_test_running) {
@@ -307,12 +343,13 @@ void EEPROM_PageTestStep(void)
     }
 }
 
-/* 重置 KEY0 测试状态并输出启动信息。 */
+/* 初始化 KEY0 测试状态并输出启动信息。 */
 static void LifeTestStart(void)
 {
     life_test_running = 1U;
     life_test_counter = 0U;
 
+#ifdef USE_FM24NM01AI3
     USART_SendString("\r\n[KEY0] byte life test start addr ");
     USART_SendHex(LIFE_TEST_ADDRESS_START, 6);
     USART_SendString(" len ");
@@ -321,21 +358,40 @@ static void LifeTestStart(void)
     USART_SendHex(LIFE_DATA_FIRST, 2);
     USART_SendString("/");
     USART_SendHex(LIFE_DATA_SECOND, 2);
-    USART_SendString("\r\n\r\n");
+    USART_SendString("\r\n");
+#else
+    life_test_phase = 0U;
+    life_test_offset = 0U;
+    USART_SendString("\r\n[4byte] life test start addr ");
+    USART_SendHex(LIFE_TEST_ADDRESS_START, 6);
+    USART_SendString(" len ");
+    USART_SendHex(LIFE_TEST_LENGTH, 2);
+    USART_SendString(" pattern AA/55\r\n");
+    USART_SendString("\r\n");
+#endif
 }
 
-/* 停止 KEY0 测试并输出最终成功轮数。 */
+/* 停止 KEY0 测试并输出停止原因。 */
 static void LifeTestStop(const char *reason)
 {
     life_test_running = 0U;
+
+#ifdef USE_FM24NM01AI3
     USART_SendString("[KEY0] byte life test stop reason: ");
     USART_SendString(reason);
     USART_SendString(" success cycles ");
     USART_SendDec(life_test_counter);
     USART_SendString("\r\n");
+#else
+    USART_SendString("[4byte] life test stop reason: ");
+    USART_SendString(reason);
+    USART_SendString(" total writes ");
+    USART_SendDec(life_test_counter);
+    USART_SendString("\r\n");
+#endif
 }
 
-/* 输出 KEY0 校验失败时的详细错误信息。 */
+/* 输出 KEY0 校验失败时的详细地址和数据。 */
 static void LifeTestReportMismatch(uint32_t addr, uint8_t expected, uint8_t actual, const char *stage)
 {
     USART_SendString("[KEY0] verify fail stage ");
@@ -349,19 +405,15 @@ static void LifeTestReportMismatch(uint32_t addr, uint8_t expected, uint8_t actu
     USART_SendString("\r\n");
 }
 
-/* 执行一整轮 KEY0 测试：先写入并校验第一组数据，再写入并校验第二组数据。 */
+/* 执行 KEY0 字节寿命测试。 */
 static void LifeTestStep(void)
 {
+#ifdef USE_FM24NM01AI3
     uint32_t offset;
     uint32_t addr;
     uint8_t readback;
 
     if ((LIFE_TEST_ADDRESS_START + LIFE_TEST_LENGTH) > EEPROM_SIZE) {
-        USART_SendString("[KEY0] invalid range start ");
-        USART_SendHex(LIFE_TEST_ADDRESS_START, 6);
-        USART_SendString(" len ");
-        USART_SendHex(LIFE_TEST_LENGTH, 4);
-        USART_SendString("\r\n");
         LifeTestStop("range overflow");
         return;
     }
@@ -378,8 +430,6 @@ static void LifeTestStep(void)
             LifeTestStop("write error");
             return;
         }
-
-        readback = 0U;
         if (EEPROM_ReadByte(addr, &readback) != STATUS_OK) {
             USART_SendString("[KEY0] read fail stage pattern1 addr ");
             USART_SendHex(addr, 6);
@@ -387,7 +437,6 @@ static void LifeTestStep(void)
             LifeTestStop("read error");
             return;
         }
-
         if (readback != LIFE_DATA_FIRST) {
             LifeTestReportMismatch(addr, LIFE_DATA_FIRST, readback, "pattern1");
             LifeTestStop("verify mismatch");
@@ -407,8 +456,6 @@ static void LifeTestStep(void)
             LifeTestStop("write error");
             return;
         }
-
-        readback = 0U;
         if (EEPROM_ReadByte(addr, &readback) != STATUS_OK) {
             USART_SendString("[KEY0] read fail stage pattern2 addr ");
             USART_SendHex(addr, 6);
@@ -416,7 +463,6 @@ static void LifeTestStep(void)
             LifeTestStop("read error");
             return;
         }
-
         if (readback != LIFE_DATA_SECOND) {
             LifeTestReportMismatch(addr, LIFE_DATA_SECOND, readback, "pattern2");
             LifeTestStop("verify mismatch");
@@ -430,9 +476,58 @@ static void LifeTestStep(void)
         USART_SendDec(life_test_counter);
         USART_SendString("\r\n");
     }
+#else
+    uint32_t addr = LIFE_TEST_ADDRESS_START + life_test_offset;
+    uint8_t target = (life_test_phase == 0U) ? LIFE_DATA_AA : LIFE_DATA_55;
+    uint8_t readback = 0U;
+
+    if (EEPROM_WriteByte(addr, target) != STATUS_OK) {
+        USART_SendString("Write error @ 0x");
+        USART_SendHex(addr, 6);
+        USART_SendString(" data 0x");
+        USART_SendHex(target, 2);
+        USART_SendString("\r\n");
+        LifeTestStop("write error");
+        return;
+    }
+    if (EEPROM_ReadByte(addr, &readback) != STATUS_OK) {
+        USART_SendString("Read error @ 0x");
+        USART_SendHex(addr, 6);
+        USART_SendString("\r\n");
+        LifeTestStop("read error");
+        return;
+    }
+    if (readback != target) {
+        uint32_t fail_round = life_test_counter + 1U;
+        USART_SendString("Data mismatch @ 0x");
+        USART_SendHex(addr, 6);
+        USART_SendString(" Expected:0x");
+        USART_SendHex(target, 2);
+        USART_SendString(" Actual:0x");
+        USART_SendHex(readback, 2);
+        USART_SendString("test number ");
+        USART_SendDec(fail_round);
+        USART_SendString(" NO ");
+        USART_SendString("\r\n");
+        LifeTestStop("data mismatch");
+        return;
+    }
+
+    life_test_offset++;
+    if (life_test_offset >= LIFE_TEST_LENGTH) {
+        life_test_offset = 0U;
+        life_test_phase ^= 0x01U;
+        life_test_counter++;
+        if ((life_test_counter % 100U) == 0U) {
+            USART_SendString("test number ");
+            USART_SendDec(life_test_counter);
+            USART_SendString(" OK\r\n");
+        }
+    }
+#endif
 }
 
-/* 重置 KEY1 整页测试状态并输出启动信息。 */
+/* 初始化 KEY1 整页寿命测试状态。 */
 static void PageTestStart(void)
 {
     page_test_running = 1U;
@@ -451,7 +546,7 @@ static void PageTestStart(void)
     USART_SendString("\r\n");
 }
 
-/* 停止 KEY1 整页测试并输出累计完成轮数。 */
+/* 停止 KEY1 整页测试并输出原因。 */
 static void PageTestStop(const char *reason)
 {
     page_test_running = 0U;
@@ -463,13 +558,90 @@ static void PageTestStop(const char *reason)
     USART_SendString("\r\n");
 }
 
-/* 执行一整轮 KEY1 整页写入和校验。 */
+/* 输出 KEY1 整页校验失败时的详细地址和数据。 */
+static void PageTestReportMismatch(uint32_t addr, uint8_t expected, uint8_t actual)
+{
+    USART_SendString("[page] verify fail addr ");
+    USART_SendHex(addr, 6);
+    USART_SendString(" target ");
+    USART_SendHex(expected, 2);
+    USART_SendString(" read ");
+    USART_SendHex(actual, 2);
+    USART_SendString("\r\n");
+}
+
+/* 执行 KEY1 整页寿命测试。 */
 static void PageTestStep(void)
 {
-    uint8_t pattern = (page_test_pattern == 0U) ? PAGE_DATA_FIRST : PAGE_DATA_SECOND;
     uint32_t start_addr = PAGE_TEST_ADDRESS;
+    uint8_t pattern = (page_test_pattern == 0U) ? PAGE_DATA_FIRST : PAGE_DATA_SECOND;
     uint16_t offset;
 
+    if ((start_addr + PAGE_TEST_LENGTH) > EEPROM_SIZE) {
+        PageTestStop("range overflow");
+        return;
+    }
+
+#ifdef USE_FM24NM01AI3
+    if ((start_addr % EEPROM_PAGE_SIZE) != 0U) {
+        PageTestStop("page addr unaligned");
+        return;
+    }
+
+    for (offset = 0U; offset < PAGE_TEST_LENGTH; offset++) {
+        page_write_buffer[offset] = pattern;
+    }
+
+    if (EEPROM_WritePage(start_addr, page_write_buffer, PAGE_TEST_LENGTH) != STATUS_OK) {
+        PageTestStop("page write error");
+        return;
+    }
+
+    for (offset = 0U; offset < PAGE_TEST_LENGTH; offset++) {
+        uint8_t readback = 0U;
+        uint32_t addr = start_addr + offset;
+
+        if (EEPROM_ReadByte(addr, &readback) != STATUS_OK) {
+            PageTestStop("read error");
+            return;
+        }
+        if (readback != pattern) {
+            PageTestReportMismatch(addr, pattern, readback);
+            PageTestStop("verify mismatch");
+            return;
+        }
+    }
+
+    pattern = (page_test_pattern == 0U) ? PAGE_DATA_SECOND : PAGE_DATA_FIRST;
+    for (offset = 0U; offset < PAGE_TEST_LENGTH; offset++) {
+        page_write_buffer[offset] = pattern;
+    }
+
+    if (EEPROM_WritePage(start_addr, page_write_buffer, PAGE_TEST_LENGTH) != STATUS_OK) {
+        PageTestStop("page write error");
+        return;
+    }
+
+    for (offset = 0U; offset < PAGE_TEST_LENGTH; offset++) {
+        uint8_t readback = 0U;
+        uint32_t addr = start_addr + offset;
+
+        if (EEPROM_ReadByte(addr, &readback) != STATUS_OK) {
+            PageTestStop("read error");
+            return;
+        }
+        if (readback != pattern) {
+            PageTestReportMismatch(addr, pattern, readback);
+            PageTestStop("verify mismatch");
+            return;
+        }
+    }
+
+    page_test_counter++;
+    USART_SendString("[page] Count ");
+    USART_SendDec(page_test_counter);
+    USART_SendString(" OK\r\n");
+#else
     for (offset = 0U; offset < PAGE_TEST_LENGTH; offset++) {
         if (page_stop_request) {
             PageTestStop("manual stop");
@@ -514,4 +686,5 @@ static void PageTestStep(void)
     USART_SendString("[page] Count ");
     USART_SendDec(page_test_counter);
     USART_SendString(" OK\r\n");
+#endif
 }
